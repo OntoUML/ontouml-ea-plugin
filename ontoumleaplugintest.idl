@@ -1,0 +1,42 @@
+// ontouml-ea-plugin-test.idl : IDL source for ontouml-ea-plugin-test
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ontoumleaplugintest.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+//import "EA.idl";
+
+[
+	uuid(78d2889a-4a16-4088-9f87-ea270d443635),
+	version(1.0),
+]
+library ontoumleaplugintestLib
+{
+	importlib("stdole2.tlb");
+	importlib("EA.tlb");
+	[
+		uuid(bccaf007-4701-4f10-a1a2-28d5a46b0a8c)
+	]
+	coclass OntoUML
+	{
+		[default] interface IOntoUML;
+	};
+
+	[
+		object,
+			uuid(69969391-e037-417b-b925-e0195e06afcd),
+			dual,
+			nonextensible,
+			pointer_default(unique)
+	]
+		interface IOntoUML : IDispatch
+	{
+		HRESULT EA_Connect([in] IDualRepository* pRepo, [out, retval] BSTR* pRetVal);
+		HRESULT EA_GetMenuItems([in] IDualRepository* pRepo, [in] BSTR bstrMenuLocation, [in] BSTR bstrMenuName, [out, retval] VARIANT* pRetVal);
+		HRESULT EA_GetMenuState([in] IDualRepository* pRepo, [in] BSTR bstrMenuLocation, [in] BSTR bstrMenuName, [in] BSTR bstrItemName, [out] VARIANT_BOOL* pIsEnabled, [out] VARIANT_BOOL* pIsChecked);
+	};
+};
+
+import "shobjidl.idl";

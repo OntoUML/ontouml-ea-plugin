@@ -1,0 +1,20 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {bccaf007-4701-4f10-a1a2-28d5a46b0a8c} = s 'OntoUML class'
+		{
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{78d2889a-4a16-4088-9f87-ea270d443635}'
+			Version = s '1.0'
+		}
+	}
+	ForceRemove EA.OntoUML = s 'EA.OntoUML'
+	{
+		CLSID = s '{bccaf007-4701-4f10-a1a2-28d5a46b0a8c}'
+	}
+}

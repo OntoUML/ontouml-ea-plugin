@@ -1,0 +1,13 @@
+HKCU
+{
+	NoRemove Software
+	{
+		NoRemove 'Sparx Systems'
+		{
+			NoRemove EAAddins64
+			{
+				ForceRemove OntoUml = s 'EA.OntoUML'
+			}
+		}
+	}
+}

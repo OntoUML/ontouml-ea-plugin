@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34916.146
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ontouml-ea-plugin-test", "ontouml-ea-plugin-test.vcxproj", "{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}.Debug|x64.ActiveCfg = Debug|x64
+		{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}.Debug|x64.Build.0 = Debug|x64
+		{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}.Debug|x86.ActiveCfg = Debug|Win32
+		{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}.Debug|x86.Build.0 = Debug|Win32
+		{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}.Release|x64.ActiveCfg = Release|x64
+		{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}.Release|x64.Build.0 = Release|x64
+		{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}.Release|x86.ActiveCfg = Release|Win32
+		{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {309FF155-2911-475A-B7F0-7A7A5BB0663A}
+	EndGlobalSection
+EndGlobal
