@@ -22,7 +22,7 @@
 #include <atlsafe.h>
 
 //////////
-// This #import is *not* about C++ '22 modules. It is an old Microsoft specific way to transpile
+// This #import is *not* about C++ '23 modules. It is an old Microsoft specific way to transpile
 // type libraries into C++ consumable headers. The COM #import statement is still (somewhat)
 // supported. It requires the Microsoft specific extensions to be enabled *and* the concurrent
 // build to be disabled. The latter can be easily achieved by putting the #import's in the
