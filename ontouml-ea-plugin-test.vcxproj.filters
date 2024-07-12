@@ -17,6 +17,9 @@
       <UniqueIdentifier>{fc415ba5-64dd-4b34-b509-4ee107e9dbb3}</UniqueIdentifier>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Imports">
+      <UniqueIdentifier>{576ffa71-a2ee-4711-91b8-255f3c0de637}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -48,7 +51,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ontouml-ea-plugin-test.cpp">
+    <ClCompile Include="ontouml-ea-plugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
@@ -76,15 +79,18 @@
     <None Include="ontouml-ea-plugin-test.rgs">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="ontouml-ea-plugin-test.def">
+    <None Include="ontouml-ea-plugin.def">
       <Filter>Source Files</Filter>
     </None>
     <None Include="OntoUML.rgs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\ontouml-ea-plugin-test\EA.tlb">
+      <Filter>Imports</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="ontoumleaplugintest.idl">
+    <Midl Include="ontoumleaplugin.idl">
       <Filter>Source Files</Filter>
     </Midl>
   </ItemGroup>

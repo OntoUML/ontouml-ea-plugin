@@ -6,7 +6,6 @@
 
 import "oaidl.idl";
 import "ocidl.idl";
-//import "EA.idl";
 
 [
 	uuid(78d2889a-4a16-4088-9f87-ea270d443635),

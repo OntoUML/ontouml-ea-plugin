@@ -28,10 +28,12 @@
 // build to be disabled. The latter can be easily achieved by putting the #import's in the
 // precompiled header, as header precompilation runs on concurrency disabled by definition.
 //////////
+#pragma warning (disable:4146) // There's a signed/unsigned conflict in the EA.tlb file
 #import "EA.tlb" no_namespace raw_interfaces_only
 
 //////////
-// Workaround for #import bug in VS2022. It generates the .tlh file, but forgets to emit the
-// corresponding #include
+// Workaround for #import bug in some versions of VS2022 where it generates the .tlh file, but
+// forgets to emit the corresponding #include
 //////////
 #include "EA.tlh"
+#pragma warning (default:4146)

@@ -23,6 +23,7 @@
     <ProjectGuid>{FB5FFC4D-DA7A-4107-96E9-A1BF219E8247}</ProjectGuid>
     <Keyword>AtlProj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ontouml-ea-plugin</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -113,7 +114,7 @@
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <ModuleDefinitionFile>.\ontouml-ea-plugin-test.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>.\ontouml-ea-plugin.def</ModuleDefinitionFile>
       <RegisterOutput>true</RegisterOutput>
     </Link>
   </ItemDefinitionGroup>
@@ -242,7 +243,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ontouml-ea-plugin-test.cpp" />
+    <ClCompile Include="ontouml-ea-plugin.cpp" />
     <ClCompile Include="OntoUML.cpp" />
     <ClCompile Include="ontoumleaplugintest_i.c">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
@@ -279,12 +280,13 @@
     <ResourceCompile Include="ontouml-ea-plugin-test.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ontouml-ea-plugin-test.def" />
+    <None Include="..\ontouml-ea-plugin-test\EA.tlb" />
+    <None Include="ontouml-ea-plugin.def" />
     <None Include="ontouml-ea-plugin-test.rgs" />
     <None Include="OntoUML.rgs" />
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="ontoumleaplugintest.idl" />
+    <Midl Include="ontoumleaplugin.idl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
