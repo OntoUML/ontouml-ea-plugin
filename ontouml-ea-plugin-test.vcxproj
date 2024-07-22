@@ -218,8 +218,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\ontouml-ea-plugin-test\oaas-proxy.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="oaas-proxy.h" />
     <ClInclude Include="OntoUML.h" />
     <ClInclude Include="ontoumleaplugintest_i.h" />

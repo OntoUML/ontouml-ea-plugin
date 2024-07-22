@@ -128,6 +128,12 @@ EXTERN_C const IID IID_IOntoUML;
             /* [out] */ VARIANT_BOOL *pIsEnabled,
             /* [out] */ VARIANT_BOOL *pIsChecked) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE EA_MenuClick( 
+            /* [in] */ /* external definition not present */ IDualRepository *pRepo,
+            /* [in] */ BSTR bstrMenuLocation,
+            /* [in] */ BSTR bstrMenuName,
+            /* [in] */ BSTR bstrItemName) = 0;
+        
     };
     
     
@@ -217,6 +223,14 @@ EXTERN_C const IID IID_IOntoUML;
             /* [out] */ VARIANT_BOOL *pIsEnabled,
             /* [out] */ VARIANT_BOOL *pIsChecked);
         
+        DECLSPEC_XFGVIRT(IOntoUML, EA_MenuClick)
+        HRESULT ( STDMETHODCALLTYPE *EA_MenuClick )( 
+            IOntoUML * This,
+            /* [in] */ /* external definition not present */ IDualRepository *pRepo,
+            /* [in] */ BSTR bstrMenuLocation,
+            /* [in] */ BSTR bstrMenuName,
+            /* [in] */ BSTR bstrItemName);
+        
         END_INTERFACE
     } IOntoUMLVtbl;
 
@@ -261,6 +275,9 @@ EXTERN_C const IID IID_IOntoUML;
 
 #define IOntoUML_EA_GetMenuState(This,pRepo,bstrMenuLocation,bstrMenuName,bstrItemName,pIsEnabled,pIsChecked)	\
     ( (This)->lpVtbl -> EA_GetMenuState(This,pRepo,bstrMenuLocation,bstrMenuName,bstrItemName,pIsEnabled,pIsChecked) ) 
+
+#define IOntoUML_EA_MenuClick(This,pRepo,bstrMenuLocation,bstrMenuName,bstrItemName)	\
+    ( (This)->lpVtbl -> EA_MenuClick(This,pRepo,bstrMenuLocation,bstrMenuName,bstrItemName) ) 
 
 #endif /* COBJMACROS */
 

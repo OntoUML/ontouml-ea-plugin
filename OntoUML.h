@@ -17,29 +17,69 @@
 
 using namespace ATL;
 
+#include <memory>
+#include <iostream>
+#include <vector>
+
+template<typename T>
+class com_aware_allocator
+{
+public:
+	using value_type = T;
+
+	com_aware_allocator() = default;
+
+	template<typename U>
+	constexpr com_aware_allocator(const com_aware_allocator<U>&) noexcept {}
+
+	T* allocate(std::size_t n) {
+		std::cout << "Allocating " << n * sizeof(T) << " bytes" << std::endl;
+		if (n > std::allocator_traits<com_aware_allocator>::max_size(*this)) {
+			throw std::bad_alloc();
+		}
+		return static_cast<T*>(::operator new(n * sizeof(T)));
+	}
+
+	void deallocate(T* p, std::size_t) noexcept {
+		std::cout << "Deallocating memory" << std::endl;
+		::operator delete(p);
+	}
+
+	template<typename U, typename... Args>
+	void construct(U* p, Args&&... args) {
+		std::cout << "Constructing element" << std::endl;
+		new(p) U(std::forward<Args>(args)...);
+		(*p)->AddRef();
+	}
+
+	template<typename U>
+	void destroy(U* p) noexcept {
+		std::cout << "Destroying element" << std::endl;
+		(*p)->Release();
+	}
+
+	friend bool operator==(const com_aware_allocator&, const com_aware_allocator&) { return true; }
+	friend bool operator!=(const com_aware_allocator&, const com_aware_allocator&) { return false; }
+};
 
 // COntoUML
-
 class ATL_NO_VTABLE COntoUML :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<COntoUML, &CLSID_OntoUML>,
 	public IDispatchImpl<IOntoUML, &IID_IOntoUML, &LIBID_ontoumleaplugintestLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
-private:
-	CComPtr<IDualRepository> m_spRepo;
-
 public:
 	COntoUML()
 	{
 	}
 
-DECLARE_REGISTRY_RESOURCEID(106)
+	DECLARE_REGISTRY_RESOURCEID(106)
 
 
-BEGIN_COM_MAP(COntoUML)
-	COM_INTERFACE_ENTRY(IOntoUML)
-	COM_INTERFACE_ENTRY(IDispatch)
-END_COM_MAP()
+	BEGIN_COM_MAP(COntoUML)
+		COM_INTERFACE_ENTRY(IOntoUML)
+		COM_INTERFACE_ENTRY(IDispatch)
+	END_COM_MAP()
 
 
 
@@ -54,11 +94,41 @@ END_COM_MAP()
 	{
 	}
 
+	template <class T>
+	inline static HRESULT copyToVector(IDualCollection* pCollection, std::vector<T*, com_aware_allocator<T*>>& vobjCollection)
+	{
+		if (!pCollection)
+		{
+			return E_INVALIDARG;
+		}
+
+		short sCount = 0;
+		auto hr = pCollection->get_Count(&sCount);
+
+		for (short i = 0; SUCCEEDED(hr) && i < sCount; i++)
+		{
+			CComPtr<IDispatch> spObject;
+			hr = pCollection->GetAt(i, &spObject);
+
+			CComQIPtr<T> spT = spObject;
+
+			if (SUCCEEDED(hr) && spT)
+			{
+				vobjCollection.push_back(spT);
+			}
+		}
+
+		return hr;
+	};
+
+
+
 public:
 
 	STDMETHOD(EA_Connect(IDualRepository* pRepo, BSTR* pRetVal));
-	STDMETHOD(EA_GetMenuItems(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, VARIANT *pRetVal));
+	STDMETHOD(EA_GetMenuItems(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, VARIANT* pRetVal));
 	STDMETHOD(EA_GetMenuState(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, BSTR bstrItemName, VARIANT_BOOL* pIsEnabled, VARIANT_BOOL* pIsChecked));
+	STDMETHOD(EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, BSTR bstrItemName));
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(OntoUML), COntoUML)

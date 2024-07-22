@@ -21,6 +21,11 @@
 #include <atlctl.h>
 #include <atlsafe.h>
 
+#include "json.hpp"
+using json = nlohmann::json;
+
+#include "oaas-proxy.h"
+
 //////////
 // This #import is *not* about C++ '23 modules. It is an old Microsoft specific way to transpile
 // type libraries into C++ consumable headers. The COM #import statement is still (somewhat)
@@ -35,5 +40,5 @@
 // Workaround for #import bug in some versions of VS2022 where it generates the .tlh file, but
 // forgets to emit the corresponding #include
 //////////
-#include "EA.tlh"
+#include "EA.tlh" // The generated code has #pragma once, so it's safe to include it here
 #pragma warning (default:4146)

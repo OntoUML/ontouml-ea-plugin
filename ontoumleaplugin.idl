@@ -35,6 +35,7 @@ library ontoumleaplugintestLib
 		HRESULT EA_Connect([in] IDualRepository* pRepo, [out, retval] BSTR* pRetVal);
 		HRESULT EA_GetMenuItems([in] IDualRepository* pRepo, [in] BSTR bstrMenuLocation, [in] BSTR bstrMenuName, [out, retval] VARIANT* pRetVal);
 		HRESULT EA_GetMenuState([in] IDualRepository* pRepo, [in] BSTR bstrMenuLocation, [in] BSTR bstrMenuName, [in] BSTR bstrItemName, [out] VARIANT_BOOL* pIsEnabled, [out] VARIANT_BOOL* pIsChecked);
+		HRESULT EA_MenuClick([in] IDualRepository* pRepo, [in] BSTR bstrMenuLocation, [in] BSTR bstrMenuName, [in] BSTR bstrItemName);
 	};
 };
 
