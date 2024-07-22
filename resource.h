@@ -1,9 +1,9 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by ontouml-ea-plugin-test.rc
+// Used by ontouml-ea-plugin.rc
 //
 #define IDS_PROJNAME                    100
-#define IDR_ONTOUMLEAPLUGINTEST         101
+#define IDR_ONTOUMLEAPLUGIN	            101
 #define IDR_ONTOUML                     106
 
 // Next default values for new objects

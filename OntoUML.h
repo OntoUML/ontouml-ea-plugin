@@ -4,7 +4,7 @@
 #include "resource.h"       // main symbols
 
 
-#include "ontoumleaplugintest_i.h"
+#include "ontoumleaplugin_i.h"
 
 // Menu items
 #define MI_ONTOUML			L"-&OntoUML"
@@ -66,7 +66,7 @@ public:
 class ATL_NO_VTABLE COntoUML :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<COntoUML, &CLSID_OntoUML>,
-	public IDispatchImpl<IOntoUML, &IID_IOntoUML, &LIBID_ontoumleaplugintestLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
+	public IDispatchImpl<IOntoUML, &IID_IOntoUML, &LIBID_ontoumleapluginLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
 	COntoUML()

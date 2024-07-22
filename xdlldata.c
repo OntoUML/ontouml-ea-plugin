@@ -12,6 +12,6 @@
 #define ENTRY_PREFIX	Prx
 
 #include "dlldata.c"
-#include "ontouml-ea-plugin-test_p.c"
+#include "ontouml-ea-plugin_p.c"
 
 #endif //_MERGE_PROXYSTUB

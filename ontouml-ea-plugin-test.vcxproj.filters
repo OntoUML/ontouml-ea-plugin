@@ -37,17 +37,11 @@
     <ClInclude Include="xdlldata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ontoumleaplugintest_i.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OntoUML.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="oaas-proxy.h">
-      <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ontouml-ea-plugin-test\oaas-proxy.h">
       <Filter>Header Files</Filter>
@@ -66,9 +60,6 @@
     <ClCompile Include="xdlldata.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ontoumleaplugintest_i.c">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -77,12 +68,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ontouml-ea-plugin-test.rc">
+    <ResourceCompile Include="ontouml-ea-plugin.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ontouml-ea-plugin-test.rgs">
+    <None Include="ontouml-ea-plugin.rgs">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="ontouml-ea-plugin.def">

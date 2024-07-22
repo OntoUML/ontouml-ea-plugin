@@ -31,8 +31,8 @@
 #endif /* __RPCNDR_H_VERSION__ */
 
 
-#ifndef __ontoumleaplugintest_i_h__
-#define __ontoumleaplugintest_i_h__
+#ifndef __ontoumleaplugin_i_h__
+#define __ontoumleaplugin_i_h__
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once

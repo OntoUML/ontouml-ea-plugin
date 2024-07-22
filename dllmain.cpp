@@ -3,11 +3,11 @@
 #include "pch.h"
 #include "framework.h"
 #include "resource.h"
-#include "ontoumleaplugintest_i.h"
+#include "ontoumleaplugin_i.h"
 #include "dllmain.h"
 #include "xdlldata.h"
 
-ContoumleaplugintestModule _AtlModule;
+ContoumleapluginModule _AtlModule;
 
 // DLL Entry Point
 extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)

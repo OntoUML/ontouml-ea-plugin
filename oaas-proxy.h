@@ -22,21 +22,21 @@
 namespace nlohmann {
     template <typename T>
     struct adl_serializer<std::shared_ptr<T>> {
-        static void to_json(json& j, const std::shared_ptr<T>& opt) {
+        static void to_json(json & j, const std::shared_ptr<T> & opt) {
             if (!opt) j = nullptr; else j = *opt;
         }
 
-        static std::shared_ptr<T> from_json(const json& j) {
+        static std::shared_ptr<T> from_json(const json & j) {
             if (j.is_null()) return std::make_shared<T>(); else return std::make_shared<T>(j.get<T>());
         }
     };
     template <typename T>
     struct adl_serializer<std::optional<T>> {
-        static void to_json(json& j, const std::optional<T>& opt) {
+        static void to_json(json & j, const std::optional<T> & opt) {
             if (!opt) j = nullptr; else j = *opt;
         }
 
-        static std::optional<T> from_json(const json& j) {
+        static std::optional<T> from_json(const json & j) {
             if (j.is_null()) return std::make_optional<T>(); else return std::make_optional<T>(j.get<T>());
         }
     };
@@ -47,7 +47,7 @@ namespace quicktype {
     using nlohmann::json;
 
     class ClassMemberConstraints {
-    private:
+        private:
         std::optional<int64_t> min_int_value;
         std::optional<int64_t> max_int_value;
         std::optional<double> min_double_value;
@@ -56,7 +56,7 @@ namespace quicktype {
         std::optional<size_t> max_length;
         std::optional<std::string> pattern;
 
-    public:
+        public:
         ClassMemberConstraints(
             std::optional<int64_t> min_int_value,
             std::optional<int64_t> max_int_value,
@@ -87,96 +87,96 @@ namespace quicktype {
         void set_max_length(size_t max_length) { this->max_length = max_length; }
         auto get_max_length() const { return max_length; }
 
-        void set_pattern(const std::string& pattern) { this->pattern = pattern; }
+        void set_pattern(const std::string &  pattern) { this->pattern = pattern; }
         auto get_pattern() const { return pattern; }
     };
 
     class ClassMemberConstraintException : public std::runtime_error {
-    public:
-        ClassMemberConstraintException(const std::string& msg) : std::runtime_error(msg) {}
+        public:
+        ClassMemberConstraintException(const std::string &  msg) : std::runtime_error(msg) {}
     };
 
     class ValueTooLowException : public ClassMemberConstraintException {
-    public:
-        ValueTooLowException(const std::string& msg) : ClassMemberConstraintException(msg) {}
+        public:
+        ValueTooLowException(const std::string &  msg) : ClassMemberConstraintException(msg) {}
     };
 
     class ValueTooHighException : public ClassMemberConstraintException {
-    public:
-        ValueTooHighException(const std::string& msg) : ClassMemberConstraintException(msg) {}
+        public:
+        ValueTooHighException(const std::string &  msg) : ClassMemberConstraintException(msg) {}
     };
 
     class ValueTooShortException : public ClassMemberConstraintException {
-    public:
-        ValueTooShortException(const std::string& msg) : ClassMemberConstraintException(msg) {}
+        public:
+        ValueTooShortException(const std::string &  msg) : ClassMemberConstraintException(msg) {}
     };
 
     class ValueTooLongException : public ClassMemberConstraintException {
-    public:
-        ValueTooLongException(const std::string& msg) : ClassMemberConstraintException(msg) {}
+        public:
+        ValueTooLongException(const std::string &  msg) : ClassMemberConstraintException(msg) {}
     };
 
     class InvalidPatternException : public ClassMemberConstraintException {
-    public:
-        InvalidPatternException(const std::string& msg) : ClassMemberConstraintException(msg) {}
+        public:
+        InvalidPatternException(const std::string &  msg) : ClassMemberConstraintException(msg) {}
     };
 
-    inline void CheckConstraint(const std::string& name, const ClassMemberConstraints& c, int64_t value) {
+    inline void CheckConstraint(const std::string &  name, const ClassMemberConstraints & c, int64_t value) {
         if (c.get_min_int_value() != std::nullopt && value < *c.get_min_int_value()) {
-            throw ValueTooLowException("Value too low for " + name + " (" + std::to_string(value) + "<" + std::to_string(*c.get_min_int_value()) + ")");
+            throw ValueTooLowException ("Value too low for " + name + " (" + std::to_string(value) + "<" + std::to_string(*c.get_min_int_value()) + ")");
         }
 
         if (c.get_max_int_value() != std::nullopt && value > *c.get_max_int_value()) {
-            throw ValueTooHighException("Value too high for " + name + " (" + std::to_string(value) + ">" + std::to_string(*c.get_max_int_value()) + ")");
+            throw ValueTooHighException ("Value too high for " + name + " (" + std::to_string(value) + ">" + std::to_string(*c.get_max_int_value()) + ")");
         }
     }
 
-    inline void CheckConstraint(const std::string& name, const ClassMemberConstraints& c, double value) {
+    inline void CheckConstraint(const std::string &  name, const ClassMemberConstraints & c, double value) {
         if (c.get_min_double_value() != std::nullopt && value < *c.get_min_double_value()) {
-            throw ValueTooLowException("Value too low for " + name + " (" + std::to_string(value) + "<" + std::to_string(*c.get_min_double_value()) + ")");
+            throw ValueTooLowException ("Value too low for " + name + " (" + std::to_string(value) + "<" + std::to_string(*c.get_min_double_value()) + ")");
         }
 
         if (c.get_max_double_value() != std::nullopt && value > *c.get_max_double_value()) {
-            throw ValueTooHighException("Value too high for " + name + " (" + std::to_string(value) + ">" + std::to_string(*c.get_max_double_value()) + ")");
+            throw ValueTooHighException ("Value too high for " + name + " (" + std::to_string(value) + ">" + std::to_string(*c.get_max_double_value()) + ")");
         }
     }
 
-    inline void CheckConstraint(const std::string& name, const ClassMemberConstraints& c, const std::string& value) {
+    inline void CheckConstraint(const std::string &  name, const ClassMemberConstraints & c, const std::string &  value) {
         if (c.get_min_length() != std::nullopt && value.length() < *c.get_min_length()) {
-            throw ValueTooShortException("Value too short for " + name + " (" + std::to_string(value.length()) + "<" + std::to_string(*c.get_min_length()) + ")");
+            throw ValueTooShortException ("Value too short for " + name + " (" + std::to_string(value.length()) + "<" + std::to_string(*c.get_min_length()) + ")");
         }
 
         if (c.get_max_length() != std::nullopt && value.length() > *c.get_max_length()) {
-            throw ValueTooLongException("Value too long for " + name + " (" + std::to_string(value.length()) + ">" + std::to_string(*c.get_max_length()) + ")");
+            throw ValueTooLongException ("Value too long for " + name + " (" + std::to_string(value.length()) + ">" + std::to_string(*c.get_max_length()) + ")");
         }
 
         if (c.get_pattern() != std::nullopt) {
             std::smatch result;
-            std::regex_search(value, result, std::regex(*c.get_pattern()));
+            std::regex_search(value, result, std::regex( *c.get_pattern() ));
             if (result.empty()) {
-                throw InvalidPatternException("Value doesn't match pattern for " + name + " (" + value + " != " + *c.get_pattern() + ")");
+                throw InvalidPatternException ("Value doesn't match pattern for " + name + " (" + value +" != " + *c.get_pattern() + ")");
             }
         }
     }
 
-#ifndef NLOHMANN_UNTYPED_quicktype_HELPER
-#define NLOHMANN_UNTYPED_quicktype_HELPER
-    inline json get_untyped(const json& j, const char* property) {
+    #ifndef NLOHMANN_UNTYPED_quicktype_HELPER
+    #define NLOHMANN_UNTYPED_quicktype_HELPER
+    inline json get_untyped(const json & j, const char * property) {
         if (j.find(property) != j.end()) {
             return j.at(property).get<json>();
         }
         return json();
     }
 
-    inline json get_untyped(const json& j, std::string property) {
+    inline json get_untyped(const json & j, std::string property) {
         return get_untyped(j, property.data());
     }
-#endif
+    #endif
 
-#ifndef NLOHMANN_OPTIONAL_quicktype_HELPER
-#define NLOHMANN_OPTIONAL_quicktype_HELPER
+    #ifndef NLOHMANN_OPTIONAL_quicktype_HELPER
+    #define NLOHMANN_OPTIONAL_quicktype_HELPER
     template <typename T>
-    inline std::shared_ptr<T> get_heap_optional(const json& j, const char* property) {
+    inline std::shared_ptr<T> get_heap_optional(const json & j, const char * property) {
         auto it = j.find(property);
         if (it != j.end() && !it->is_null()) {
             return j.at(property).get<std::shared_ptr<T>>();
@@ -185,11 +185,11 @@ namespace quicktype {
     }
 
     template <typename T>
-    inline std::shared_ptr<T> get_heap_optional(const json& j, std::string property) {
+    inline std::shared_ptr<T> get_heap_optional(const json & j, std::string property) {
         return get_heap_optional<T>(j, property.data());
     }
     template <typename T>
-    inline std::optional<T> get_stack_optional(const json& j, const char* property) {
+    inline std::optional<T> get_stack_optional(const json & j, const char * property) {
         auto it = j.find(property);
         if (it != j.end() && !it->is_null()) {
             return j.at(property).get<std::optional<T>>();
@@ -198,25 +198,25 @@ namespace quicktype {
     }
 
     template <typename T>
-    inline std::optional<T> get_stack_optional(const json& j, std::string property) {
+    inline std::optional<T> get_stack_optional(const json & j, std::string property) {
         return get_stack_optional<T>(j, property.data());
     }
-#endif
+    #endif
 
     /**
      * An object that represents a reference to a resource by its name and its URI allowing
      * references to resources in the semantic web.
      */
     class Resource {
-    public:
+        public:
         Resource() = default;
         virtual ~Resource() = default;
 
-    private:
+        private:
         std::optional<std::map<std::string, std::string>> name;
         std::optional<std::string> uri;
 
-    public:
+        public:
         /**
          * Determines the name of the resource using a language string.
          */
@@ -332,7 +332,7 @@ namespace quicktype {
      * (i.e., first-order logic, or OCL).
      */
     class Element {
-    public:
+        public:
         Element() :
             is_view_of_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt),
             rectangle_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt),
@@ -347,7 +347,7 @@ namespace quicktype {
         {}
         virtual ~Element() = default;
 
-    private:
+        private:
         std::optional<std::string> owner;
         ElementType type;
         std::optional<std::vector<std::string>> views;
@@ -385,7 +385,7 @@ namespace quicktype {
         std::optional<std::string> note;
         ClassMemberConstraints note_constraint;
 
-    public:
+        public:
         /**
          * Identifies the model element that is the owner of a diagram.
          */
@@ -425,9 +425,9 @@ namespace quicktype {
          *
          * Determines the type of a note object.
          */
-        const ElementType& get_type() const { return type; }
-        ElementType& get_mutable_type() { return type; }
-        void set_type(const ElementType& value) { this->type = value; }
+        const ElementType & get_type() const { return type; }
+        ElementType & get_mutable_type() { return type; }
+        void set_type(const ElementType & value) { this->type = value; }
 
         /**
          * Identifies the views contained in the diagram.
@@ -629,33 +629,33 @@ namespace quicktype {
      * object.
      */
     class Point {
-    public:
+        public:
         Point() :
             x_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt),
             y_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
         {}
         virtual ~Point() = default;
 
-    private:
+        private:
         int64_t x;
         ClassMemberConstraints x_constraint;
         int64_t y;
         ClassMemberConstraints y_constraint;
 
-    public:
+        public:
         /**
          * Determines the horizontal coordinate of a point using a positive integer.
          */
-        const int64_t& get_x() const { return x; }
-        int64_t& get_mutable_x() { return x; }
-        void set_x(const int64_t& value) { CheckConstraint("x", x_constraint, value); this->x = value; }
+        const int64_t & get_x() const { return x; }
+        int64_t & get_mutable_x() { return x; }
+        void set_x(const int64_t & value) { CheckConstraint("x", x_constraint, value); this->x = value; }
 
         /**
          * Determines the vertical coordinate of a point using a positive integer.
          */
-        const int64_t& get_y() const { return y; }
-        int64_t& get_mutable_y() { return y; }
-        void set_y(const int64_t& value) { CheckConstraint("y", y_constraint, value); this->y = value; }
+        const int64_t & get_y() const { return y; }
+        int64_t & get_mutable_y() { return y; }
+        void set_y(const int64_t & value) { CheckConstraint("y", y_constraint, value); this->y = value; }
     };
 
     enum class OntoUmlElementType : int { BINARY_RELATION, BINARY_RELATION_VIEW, CLASS, CLASS_VIEW, DIAMOND, GENERALIZATION, GENERALIZATION_SET, GENERALIZATION_SET_VIEW, GENERALIZATION_VIEW, LINK, LINK_VIEW, LITERAL, NARY_RELATION, NARY_RELATION_VIEW, NOTE, NOTE_VIEW, PACKAGE, PACKAGE_VIEW, PATH, PROJECT, PROPERTY, RECTANGLE, TEXT };
@@ -804,7 +804,7 @@ namespace quicktype {
      * contents according to the OntoUML Metamodel project.
      */
     class OntoumlSchema {
-    public:
+        public:
         OntoumlSchema() :
             id_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt),
             general_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt),
@@ -822,7 +822,7 @@ namespace quicktype {
         {}
         virtual ~OntoumlSchema() = default;
 
-    private:
+        private:
         std::string created;
         std::string id;
         ClassMemberConstraints id_constraint;
@@ -902,22 +902,22 @@ namespace quicktype {
         std::optional<std::string> target_view;
         ClassMemberConstraints target_view_constraint;
 
-    public:
+        public:
         /**
          * Determines when the element was created using a string in one of the following formats:
          * year, year-month, date, or date-time.
          */
-        const std::string& get_created() const { return created; }
-        std::string& get_mutable_created() { return created; }
-        void set_created(const std::string& value) { this->created = value; }
+        const std::string & get_created() const { return created; }
+        std::string & get_mutable_created() { return created; }
+        void set_created(const std::string & value) { this->created = value; }
 
         /**
          * Determines the unique identifier for an OntoUML element in an ontology using a non-empty
          * string.
          */
-        const std::string& get_id() const { return id; }
-        std::string& get_mutable_id() { return id; }
-        void set_id(const std::string& value) { CheckConstraint("id", id_constraint, value); this->id = value; }
+        const std::string & get_id() const { return id; }
+        std::string & get_mutable_id() { return id; }
+        void set_id(const std::string & value) { CheckConstraint("id", id_constraint, value); this->id = value; }
 
         /**
          * Determines when the element was modified using a string in one of the following formats:
@@ -1204,9 +1204,9 @@ namespace quicktype {
          *
          * Determines the type of a binary relation view object.
          */
-        const OntoUmlElementType& get_type() const { return type; }
-        OntoUmlElementType& get_mutable_type() { return type; }
-        void set_type(const OntoUmlElementType& value) { this->type = value; }
+        const OntoUmlElementType & get_type() const { return type; }
+        OntoUmlElementType & get_mutable_type() { return type; }
+        void set_type(const OntoUmlElementType & value) { this->type = value; }
 
         /**
          * Determines custom properties of the model element using key-value pairs. In UML, for
@@ -1535,50 +1535,50 @@ namespace quicktype {
 }
 
 namespace quicktype {
-    void from_json(const json& j, Resource& x);
-    void to_json(json& j, const Resource& x);
+void from_json(const json & j, Resource & x);
+void to_json(json & j, const Resource & x);
 
-    void from_json(const json& j, Element& x);
-    void to_json(json& j, const Element& x);
+void from_json(const json & j, Element & x);
+void to_json(json & j, const Element & x);
 
-    void from_json(const json& j, Point& x);
-    void to_json(json& j, const Point& x);
+void from_json(const json & j, Point & x);
+void to_json(json & j, const Point & x);
 
-    void from_json(const json& j, OntoumlSchema& x);
-    void to_json(json& j, const OntoumlSchema& x);
+void from_json(const json & j, OntoumlSchema & x);
+void to_json(json & j, const OntoumlSchema & x);
 
-    void from_json(const json& j, AggregationKind& x);
-    void to_json(json& j, const AggregationKind& x);
+void from_json(const json & j, AggregationKind & x);
+void to_json(json & j, const AggregationKind & x);
 
-    void from_json(const json& j, RestrictedTo& x);
-    void to_json(json& j, const RestrictedTo& x);
+void from_json(const json & j, RestrictedTo & x);
+void to_json(json & j, const RestrictedTo & x);
 
-    void from_json(const json& j, ElementType& x);
-    void to_json(json& j, const ElementType& x);
+void from_json(const json & j, ElementType & x);
+void to_json(json & j, const ElementType & x);
 
-    void from_json(const json& j, OntoUmlElementType& x);
-    void to_json(json& j, const OntoUmlElementType& x);
+void from_json(const json & j, OntoUmlElementType & x);
+void to_json(json & j, const OntoUmlElementType & x);
 }
 namespace nlohmann {
-    template <>
-    struct adl_serializer<std::variant<std::map<std::string, std::string>, std::string>> {
-        static void from_json(const json& j, std::variant<std::map<std::string, std::string>, std::string>& x);
-        static void to_json(json& j, const std::variant<std::map<std::string, std::string>, std::string>& x);
-    };
+template <>
+struct adl_serializer<std::variant<std::map<std::string, std::string>, std::string>> {
+    static void from_json(const json & j, std::variant<std::map<std::string, std::string>, std::string> & x);
+    static void to_json(json & j, const std::variant<std::map<std::string, std::string>, std::string> & x);
+};
 }
 namespace quicktype {
-    inline void from_json(const json& j, Resource& x) {
+    inline void from_json(const json & j, Resource& x) {
         x.set_name(get_stack_optional<std::map<std::string, std::string>>(j, "name"));
         x.set_uri(get_stack_optional<std::string>(j, "URI"));
     }
 
-    inline void to_json(json& j, const Resource& x) {
+    inline void to_json(json & j, const Resource & x) {
         j = json::object();
         j["name"] = x.get_name();
         j["URI"] = x.get_uri();
     }
 
-    inline void from_json(const json& j, Element& x) {
+    inline void from_json(const json & j, Element& x) {
         x.set_owner(get_stack_optional<std::string>(j, "owner"));
         x.set_type(j.at("type").get<ElementType>());
         x.set_views(get_stack_optional<std::vector<std::string>>(j, "views"));
@@ -1607,7 +1607,7 @@ namespace quicktype {
         x.set_note(get_stack_optional<std::string>(j, "note"));
     }
 
-    inline void to_json(json& j, const Element& x) {
+    inline void to_json(json & j, const Element & x) {
         j = json::object();
         j["owner"] = x.get_owner();
         j["type"] = x.get_type();
@@ -1637,18 +1637,18 @@ namespace quicktype {
         j["note"] = x.get_note();
     }
 
-    inline void from_json(const json& j, Point& x) {
+    inline void from_json(const json & j, Point& x) {
         x.set_x(j.at("x").get<int64_t>());
         x.set_y(j.at("y").get<int64_t>());
     }
 
-    inline void to_json(json& j, const Point& x) {
+    inline void to_json(json & j, const Point & x) {
         j = json::object();
         j["x"] = x.get_x();
         j["y"] = x.get_y();
     }
 
-    inline void from_json(const json& j, OntoumlSchema& x) {
+    inline void from_json(const json & j, OntoumlSchema& x) {
         x.set_created(j.at("created").get<std::string>());
         x.set_id(j.at("id").get<std::string>());
         x.set_modified(get_stack_optional<std::string>(j, "modified"));
@@ -1716,7 +1716,7 @@ namespace quicktype {
         x.set_target_view(get_stack_optional<std::string>(j, "targetView"));
     }
 
-    inline void to_json(json& j, const OntoumlSchema& x) {
+    inline void to_json(json & j, const OntoumlSchema & x) {
         j = json::object();
         j["created"] = x.get_created();
         j["id"] = x.get_id();
@@ -1785,23 +1785,23 @@ namespace quicktype {
         j["targetView"] = x.get_target_view();
     }
 
-    inline void from_json(const json& j, AggregationKind& x) {
+    inline void from_json(const json & j, AggregationKind & x) {
         if (j == "COMPOSITE") x = AggregationKind::COMPOSITE;
         else if (j == "NONE") x = AggregationKind::NONE;
         else if (j == "SHARED") x = AggregationKind::SHARED;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
-    inline void to_json(json& j, const AggregationKind& x) {
+    inline void to_json(json & j, const AggregationKind & x) {
         switch (x) {
-        case AggregationKind::COMPOSITE: j = "COMPOSITE"; break;
-        case AggregationKind::NONE: j = "NONE"; break;
-        case AggregationKind::SHARED: j = "SHARED"; break;
-        default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            case AggregationKind::COMPOSITE: j = "COMPOSITE"; break;
+            case AggregationKind::NONE: j = "NONE"; break;
+            case AggregationKind::SHARED: j = "SHARED"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
-    inline void from_json(const json& j, RestrictedTo& x) {
+    inline void from_json(const json & j, RestrictedTo & x) {
         if (j == "abstract") x = RestrictedTo::ABSTRACT;
         else if (j == "collective") x = RestrictedTo::COLLECTIVE;
         else if (j == "event") x = RestrictedTo::EVENT;
@@ -1816,25 +1816,25 @@ namespace quicktype {
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
-    inline void to_json(json& j, const RestrictedTo& x) {
+    inline void to_json(json & j, const RestrictedTo & x) {
         switch (x) {
-        case RestrictedTo::ABSTRACT: j = "abstract"; break;
-        case RestrictedTo::COLLECTIVE: j = "collective"; break;
-        case RestrictedTo::EVENT: j = "event"; break;
-        case RestrictedTo::EXTRINSIC_MODE: j = "extrinsic-mode"; break;
-        case RestrictedTo::FUNCTIONAL_COMPLEX: j = "functional-complex"; break;
-        case RestrictedTo::INTRINSIC_MODE: j = "intrinsic-mode"; break;
-        case RestrictedTo::QUALITY: j = "quality"; break;
-        case RestrictedTo::QUANTITY: j = "quantity"; break;
-        case RestrictedTo::RELATOR: j = "relator"; break;
-        case RestrictedTo::SITUATION: j = "situation"; break;
-        case RestrictedTo::TYPE: j = "type"; break;
-        default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            case RestrictedTo::ABSTRACT: j = "abstract"; break;
+            case RestrictedTo::COLLECTIVE: j = "collective"; break;
+            case RestrictedTo::EVENT: j = "event"; break;
+            case RestrictedTo::EXTRINSIC_MODE: j = "extrinsic-mode"; break;
+            case RestrictedTo::FUNCTIONAL_COMPLEX: j = "functional-complex"; break;
+            case RestrictedTo::INTRINSIC_MODE: j = "intrinsic-mode"; break;
+            case RestrictedTo::QUALITY: j = "quality"; break;
+            case RestrictedTo::QUANTITY: j = "quantity"; break;
+            case RestrictedTo::RELATOR: j = "relator"; break;
+            case RestrictedTo::SITUATION: j = "situation"; break;
+            case RestrictedTo::TYPE: j = "type"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
-    inline void from_json(const json& j, ElementType& x) {
-        static std::unordered_map<std::string, ElementType> enumValues{
+    inline void from_json(const json & j, ElementType & x) {
+        static std::unordered_map<std::string, ElementType> enumValues {
             {"BinaryRelation", ElementType::BINARY_RELATION},
             {"BinaryRelationView", ElementType::BINARY_RELATION_VIEW},
             {"Class", ElementType::CLASS},
@@ -1858,30 +1858,30 @@ namespace quicktype {
         }
     }
 
-    inline void to_json(json& j, const ElementType& x) {
+    inline void to_json(json & j, const ElementType & x) {
         switch (x) {
-        case ElementType::BINARY_RELATION: j = "BinaryRelation"; break;
-        case ElementType::BINARY_RELATION_VIEW: j = "BinaryRelationView"; break;
-        case ElementType::CLASS: j = "Class"; break;
-        case ElementType::CLASS_VIEW: j = "ClassView"; break;
-        case ElementType::DIAGRAM: j = "Diagram"; break;
-        case ElementType::GENERALIZATION: j = "Generalization"; break;
-        case ElementType::GENERALIZATION_SET: j = "GeneralizationSet"; break;
-        case ElementType::GENERALIZATION_SET_VIEW: j = "GeneralizationSetView"; break;
-        case ElementType::GENERALIZATION_VIEW: j = "GeneralizationView"; break;
-        case ElementType::LINK: j = "Link"; break;
-        case ElementType::LINK_VIEW: j = "LinkView"; break;
-        case ElementType::NARY_RELATION: j = "NaryRelation"; break;
-        case ElementType::NARY_RELATION_VIEW: j = "NaryRelationView"; break;
-        case ElementType::NOTE: j = "Note"; break;
-        case ElementType::NOTE_VIEW: j = "NoteView"; break;
-        case ElementType::PACKAGE_VIEW: j = "PackageView"; break;
-        default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            case ElementType::BINARY_RELATION: j = "BinaryRelation"; break;
+            case ElementType::BINARY_RELATION_VIEW: j = "BinaryRelationView"; break;
+            case ElementType::CLASS: j = "Class"; break;
+            case ElementType::CLASS_VIEW: j = "ClassView"; break;
+            case ElementType::DIAGRAM: j = "Diagram"; break;
+            case ElementType::GENERALIZATION: j = "Generalization"; break;
+            case ElementType::GENERALIZATION_SET: j = "GeneralizationSet"; break;
+            case ElementType::GENERALIZATION_SET_VIEW: j = "GeneralizationSetView"; break;
+            case ElementType::GENERALIZATION_VIEW: j = "GeneralizationView"; break;
+            case ElementType::LINK: j = "Link"; break;
+            case ElementType::LINK_VIEW: j = "LinkView"; break;
+            case ElementType::NARY_RELATION: j = "NaryRelation"; break;
+            case ElementType::NARY_RELATION_VIEW: j = "NaryRelationView"; break;
+            case ElementType::NOTE: j = "Note"; break;
+            case ElementType::NOTE_VIEW: j = "NoteView"; break;
+            case ElementType::PACKAGE_VIEW: j = "PackageView"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
-    inline void from_json(const json& j, OntoUmlElementType& x) {
-        static std::unordered_map<std::string, OntoUmlElementType> enumValues{
+    inline void from_json(const json & j, OntoUmlElementType & x) {
+        static std::unordered_map<std::string, OntoUmlElementType> enumValues {
             {"BinaryRelation", OntoUmlElementType::BINARY_RELATION},
             {"BinaryRelationView", OntoUmlElementType::BINARY_RELATION_VIEW},
             {"Class", OntoUmlElementType::CLASS},
@@ -1912,37 +1912,37 @@ namespace quicktype {
         }
     }
 
-    inline void to_json(json& j, const OntoUmlElementType& x) {
+    inline void to_json(json & j, const OntoUmlElementType & x) {
         switch (x) {
-        case OntoUmlElementType::BINARY_RELATION: j = "BinaryRelation"; break;
-        case OntoUmlElementType::BINARY_RELATION_VIEW: j = "BinaryRelationView"; break;
-        case OntoUmlElementType::CLASS: j = "Class"; break;
-        case OntoUmlElementType::CLASS_VIEW: j = "ClassView"; break;
-        case OntoUmlElementType::DIAMOND: j = "Diamond"; break;
-        case OntoUmlElementType::GENERALIZATION: j = "Generalization"; break;
-        case OntoUmlElementType::GENERALIZATION_SET: j = "GeneralizationSet"; break;
-        case OntoUmlElementType::GENERALIZATION_SET_VIEW: j = "GeneralizationSetView"; break;
-        case OntoUmlElementType::GENERALIZATION_VIEW: j = "GeneralizationView"; break;
-        case OntoUmlElementType::LINK: j = "Link"; break;
-        case OntoUmlElementType::LINK_VIEW: j = "LinkView"; break;
-        case OntoUmlElementType::LITERAL: j = "Literal"; break;
-        case OntoUmlElementType::NARY_RELATION: j = "NaryRelation"; break;
-        case OntoUmlElementType::NARY_RELATION_VIEW: j = "NaryRelationView"; break;
-        case OntoUmlElementType::NOTE: j = "Note"; break;
-        case OntoUmlElementType::NOTE_VIEW: j = "NoteView"; break;
-        case OntoUmlElementType::PACKAGE: j = "Package"; break;
-        case OntoUmlElementType::PACKAGE_VIEW: j = "PackageView"; break;
-        case OntoUmlElementType::PATH: j = "Path"; break;
-        case OntoUmlElementType::PROJECT: j = "Project"; break;
-        case OntoUmlElementType::PROPERTY: j = "Property"; break;
-        case OntoUmlElementType::RECTANGLE: j = "Rectangle"; break;
-        case OntoUmlElementType::TEXT: j = "Text"; break;
-        default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            case OntoUmlElementType::BINARY_RELATION: j = "BinaryRelation"; break;
+            case OntoUmlElementType::BINARY_RELATION_VIEW: j = "BinaryRelationView"; break;
+            case OntoUmlElementType::CLASS: j = "Class"; break;
+            case OntoUmlElementType::CLASS_VIEW: j = "ClassView"; break;
+            case OntoUmlElementType::DIAMOND: j = "Diamond"; break;
+            case OntoUmlElementType::GENERALIZATION: j = "Generalization"; break;
+            case OntoUmlElementType::GENERALIZATION_SET: j = "GeneralizationSet"; break;
+            case OntoUmlElementType::GENERALIZATION_SET_VIEW: j = "GeneralizationSetView"; break;
+            case OntoUmlElementType::GENERALIZATION_VIEW: j = "GeneralizationView"; break;
+            case OntoUmlElementType::LINK: j = "Link"; break;
+            case OntoUmlElementType::LINK_VIEW: j = "LinkView"; break;
+            case OntoUmlElementType::LITERAL: j = "Literal"; break;
+            case OntoUmlElementType::NARY_RELATION: j = "NaryRelation"; break;
+            case OntoUmlElementType::NARY_RELATION_VIEW: j = "NaryRelationView"; break;
+            case OntoUmlElementType::NOTE: j = "Note"; break;
+            case OntoUmlElementType::NOTE_VIEW: j = "NoteView"; break;
+            case OntoUmlElementType::PACKAGE: j = "Package"; break;
+            case OntoUmlElementType::PACKAGE_VIEW: j = "PackageView"; break;
+            case OntoUmlElementType::PATH: j = "Path"; break;
+            case OntoUmlElementType::PROJECT: j = "Project"; break;
+            case OntoUmlElementType::PROPERTY: j = "Property"; break;
+            case OntoUmlElementType::RECTANGLE: j = "Rectangle"; break;
+            case OntoUmlElementType::TEXT: j = "Text"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 }
 namespace nlohmann {
-    inline void adl_serializer<std::variant<std::map<std::string, std::string>, std::string>>::from_json(const json& j, std::variant<std::map<std::string, std::string>, std::string>& x) {
+    inline void adl_serializer<std::variant<std::map<std::string, std::string>, std::string>>::from_json(const json & j, std::variant<std::map<std::string, std::string>, std::string> & x) {
         if (j.is_string())
             x = j.get<std::string>();
         else if (j.is_object())
@@ -1950,15 +1950,15 @@ namespace nlohmann {
         else throw std::runtime_error("Could not deserialise!");
     }
 
-    inline void adl_serializer<std::variant<std::map<std::string, std::string>, std::string>>::to_json(json& j, const std::variant<std::map<std::string, std::string>, std::string>& x) {
+    inline void adl_serializer<std::variant<std::map<std::string, std::string>, std::string>>::to_json(json & j, const std::variant<std::map<std::string, std::string>, std::string> & x) {
         switch (x.index()) {
-        case 0:
-            j = std::get<std::map<std::string, std::string>>(x);
-            break;
-        case 1:
-            j = std::get<std::string>(x);
-            break;
-        default: throw std::runtime_error("Input JSON does not conform to schema!");
+            case 0:
+                j = std::get<std::map<std::string, std::string>>(x);
+                break;
+            case 1:
+                j = std::get<std::string>(x);
+                break;
+            default: throw std::runtime_error("Input JSON does not conform to schema!");
         }
     }
 }

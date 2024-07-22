@@ -448,5 +448,6 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 	// Todo: Validate the model or diagram using the ids in vElementIDs and vConnectorIDs
 	//////////
 
+
 	return S_OK;
 }

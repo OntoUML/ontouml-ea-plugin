@@ -1,4 +1,4 @@
-// ontouml-ea-plugin-test.cpp : Implementation of DLL Exports.
+// ontouml-ea-plugin.cpp : Implementation of DLL Exports.
 
 
 #include "pch.h"
