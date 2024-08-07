@@ -86,6 +86,9 @@
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -273,7 +276,9 @@
     <None Include="..\ontouml-ea-plugin\EA.tlb" />
     <None Include="ontouml-ea-plugin.def" />
     <None Include="ontouml-ea-plugin.rgs" />
+    <None Include="ontouml-schema.json" />
     <None Include="OntoUML.rgs" />
+    <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ontoumleaplugin.idl" />

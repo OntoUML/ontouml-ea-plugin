@@ -129,6 +129,17 @@ public:
 	STDMETHOD(EA_GetMenuItems(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, VARIANT* pRetVal));
 	STDMETHOD(EA_GetMenuState(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, BSTR bstrItemName, VARIANT_BOOL* pIsEnabled, VARIANT_BOOL* pIsChecked));
 	STDMETHOD(EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, BSTR bstrItemName));
+	HRESULT GetDiagramToValidate(IDualRepository* pRepo, ATL::CComPtr<IDualDiagram>& spDiagram);
+	HRESULT GetModelPackage(IDualRepository* pRepo, ATL::CComPtr<IDualPackage>& spPackage);
+	HRESULT GetConnectorIdInModelScope(IDispatch* pobjConnector, long& lConnectorID);
+	HRESULT GetElementIdInModelScope(IDispatch* pobjElement, long& lElementID);
+	HRESULT GetConnectorCollectionInModelScope(const std::function<HRESULT(std::vector<IDispatch*, com_aware_allocator<IDispatch*>>&)>& getElementCollection, std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection);
+	HRESULT GetElementCollectionInModelScope(IDualPackage* pRootPackage, std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection);
+	HRESULT GetAllPackages(IDualPackage* pPackage, std::vector<IDualPackage*, com_aware_allocator<IDualPackage*>>& vobjPackages);
+	HRESULT GetConnectIdInDiagramScope(IDispatch* pobjDiagram, long& lConnectorID);
+	HRESULT GetElementIdInDiagramScope(IDispatch* pobjDiagram, long& lElementID);
+	HRESULT GetConnectorCollectionInDiagramScope(const ATL::CComPtr<IDualDiagram>& spDiagram, std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection);
+	HRESULT GetElementCollectionInDiagramScope(const ATL::CComPtr<IDualDiagram>& spDiagram, std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(OntoUML), COntoUML)

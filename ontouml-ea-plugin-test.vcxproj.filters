@@ -43,10 +43,13 @@
     <ClInclude Include="OntoUML.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ontouml-ea-plugin-test\oaas-proxy.h">
+    <ClInclude Include="json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="json.hpp">
+    <ClInclude Include="..\ontouml-ea-plugin\oaas-proxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ontoumleaplugin_i.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -66,6 +69,9 @@
     <ClCompile Include="OntoUML.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ontoumleaplugin_i.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ontouml-ea-plugin.rc">
@@ -82,8 +88,12 @@
     <None Include="OntoUML.rgs">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\ontouml-ea-plugin-test\EA.tlb">
-      <Filter>Imports</Filter>
+    <None Include="..\ontouml-ea-plugin\EA.tlb" />
+    <None Include="ontouml-schema.json">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="vcpkg.json">
+      <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
