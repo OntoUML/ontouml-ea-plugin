@@ -21,10 +21,9 @@
 #include <atlctl.h>
 #include <atlsafe.h>
 
-#include "json.hpp"
-using json = nlohmann::json;
+#include <cpprest/json.h>
+#include <cpprest/http_client.h>
 
-#include "oaas-proxy.h"
 
 //////////
 // This #import is *not* about C++ '23 modules. It is an old Microsoft specific way to transpile

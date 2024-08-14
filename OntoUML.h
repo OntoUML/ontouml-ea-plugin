@@ -11,6 +11,8 @@
 #define MI_VALIDATE_MODEL	L"Validate &Model"
 #define MI_VALIDATE_DIAGRAM	L"Validate &Diagram"
 
+#define TAB_ONTOUML			L"OntoUML"
+
 #if defined(_WIN32_WCE) && !defined(_CE_DCOM) && !defined(_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA)
 #error "Single-threaded COM objects are not properly supported on Windows CE platform, such as the Windows Mobile platforms that do not include full DCOM support. Define _CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA to force ATL to support creating single-thread COM object's and allow use of it's single-threaded COM object implementations. The threading model in your rgs file was set to 'Free' as that is the only threading model supported in non DCOM Windows CE platforms."
 #endif
@@ -45,15 +47,15 @@ public:
 		::operator delete(p);
 	}
 
-	template<typename U, typename... Args>
-	void construct(U* p, Args&&... args) {
+	template<typename T2, typename... Args>
+	void construct(T2* p, Args&&... args) {
 		std::cout << "Constructing element" << std::endl;
-		new(p) U(std::forward<Args>(args)...);
+		new(p) T2(std::forward<Args>(args)...);
 		(*p)->AddRef();
 	}
 
-	template<typename U>
-	void destroy(U* p) noexcept {
+	template<typename T2>
+	void destroy(T2* p) noexcept {
 		std::cout << "Destroying element" << std::endl;
 		(*p)->Release();
 	}
@@ -95,7 +97,7 @@ public:
 	}
 
 	template <class T>
-	inline static HRESULT copyToVector(IDualCollection* pCollection, std::vector<T*, com_aware_allocator<T*>>& vobjCollection)
+	inline static HRESULT copyToVector(IDualCollection* pCollection, std::vector<T*, com_aware_allocator<T*>>& vobjCollection, std::function<bool(T *)> filter = [](T *p) -> bool { return true; })
 	{
 		if (!pCollection)
 		{
@@ -112,7 +114,7 @@ public:
 
 			CComQIPtr<T> spT = spObject;
 
-			if (SUCCEEDED(hr) && spT)
+			if (SUCCEEDED(hr) && spT && filter(spT))
 			{
 				vobjCollection.push_back(spT);
 			}
@@ -121,7 +123,14 @@ public:
 		return hr;
 	};
 
-
+private:
+	//typedef std::vector < IDualDiagram*, com_aware_allocator<IDualDiagram*> > DiagramVector;
+	static std::map<std::wstring, std::vector<std::wstring>> s_defaultRestrictedToValues;
+	//std::map<long, std::tuple<DiagramVector::iterator, DiagramVector>> m_diagramsPerElementId; // for later use
+	CComPtr<IDualDiagram> m_spCurrentDiagram;
+	std::map<long, web::json::value> m_validationResultsPerOutputId;
+	std::map<long, long> m_outputIdToElementId;
+	// CComPtr<IValidationResultControl> m_spValidationResultControl; // Not in use right now, need to fix issue with initialization
 
 public:
 
@@ -129,6 +138,8 @@ public:
 	STDMETHOD(EA_GetMenuItems(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, VARIANT* pRetVal));
 	STDMETHOD(EA_GetMenuState(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, BSTR bstrItemName, VARIANT_BOOL* pIsEnabled, VARIANT_BOOL* pIsChecked));
 	STDMETHOD(EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, BSTR bstrItemName));
+	STDMETHOD(EA_OnOutputItemClicked(IDualRepository* pRepo, BSTR bstrTabName, BSTR bstrLineText, int ID));
+	STDMETHOD(EA_OnOutputItemDoubleClicked(IDualRepository* pRepo, BSTR bstrTabName, BSTR bstrLineText, int ID));
 	HRESULT GetDiagramToValidate(IDualRepository* pRepo, ATL::CComPtr<IDualDiagram>& spDiagram);
 	HRESULT GetModelPackage(IDualRepository* pRepo, ATL::CComPtr<IDualPackage>& spPackage);
 	HRESULT GetConnectorIdInModelScope(IDispatch* pobjConnector, long& lConnectorID);
@@ -136,10 +147,16 @@ public:
 	HRESULT GetConnectorCollectionInModelScope(const std::function<HRESULT(std::vector<IDispatch*, com_aware_allocator<IDispatch*>>&)>& getElementCollection, std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection);
 	HRESULT GetElementCollectionInModelScope(IDualPackage* pRootPackage, std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection);
 	HRESULT GetAllPackages(IDualPackage* pPackage, std::vector<IDualPackage*, com_aware_allocator<IDualPackage*>>& vobjPackages);
-	HRESULT GetConnectIdInDiagramScope(IDispatch* pobjDiagram, long& lConnectorID);
+	HRESULT GetConnectorIdInDiagramScope(IDispatch* pobjDiagram, long& lConnectorID);
 	HRESULT GetElementIdInDiagramScope(IDispatch* pobjDiagram, long& lElementID);
 	HRESULT GetConnectorCollectionInDiagramScope(const ATL::CComPtr<IDualDiagram>& spDiagram, std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection);
 	HRESULT GetElementCollectionInDiagramScope(const ATL::CComPtr<IDualDiagram>& spDiagram, std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection);
+	HRESULT FillAssociationProperty(web::json::value& prop, std::wstring id, IDualConnector* pConnector, std::function<HRESULT(IDualConnector*, IDualConnectorEnd**)> endSelector, std::function<HRESULT(IDualConnector*, LONG*)> idSelector);
+	HRESULT FillGeneralizationProperty(web::json::value& prop, IDualConnector* pConnector, std::function<HRESULT(IDualConnector*, LONG*)> idSelector);
+	HRESULT CreateOntoUMLTab(IDualRepository* pRepo);
+	HRESULT DeselectEverything(CComPtr<IDualDiagram>& spDiagram);
+	HRESULT DeselectEverything(IDualRepository *pRepo);
+	HRESULT SelectObject(IDualRepository *pRepo, CComPtr<IDualDiagram>& spDiagram, LONG id);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(OntoUML), COntoUML)

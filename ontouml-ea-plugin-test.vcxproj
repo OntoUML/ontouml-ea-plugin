@@ -230,6 +230,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="ValidationResultControl.h" />
     <ClInclude Include="xdlldata.h" />
   </ItemGroup>
   <ItemGroup>
@@ -258,6 +259,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ValidationResultControl.cpp" />
     <ClCompile Include="xdlldata.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
@@ -278,10 +280,17 @@
     <None Include="ontouml-ea-plugin.rgs" />
     <None Include="ontouml-schema.json" />
     <None Include="OntoUML.rgs" />
+    <None Include="ValidationResultControl.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="ValidationResultControl.rgs" />
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ontoumleaplugin.idl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ValidationResultControl.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

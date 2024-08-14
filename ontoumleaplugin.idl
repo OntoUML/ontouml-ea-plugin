@@ -4,8 +4,36 @@
 // This file will be processed by the MIDL tool to
 // produce the type library (ontoumleaplugin.tlb) and marshalling code.
 
+#include "olectl.h"
 import "oaidl.idl";
 import "ocidl.idl";
+
+[
+	object,
+	uuid(53fb6b99-3b18-4d0c-aae9-bab17ea2141a),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IValidationResultControl : IDispatch
+{
+	[propput, bindable, requestedit, id(DISPID_BACKCOLOR)]
+	HRESULT BackColor([in]OLE_COLOR clr);
+	[propget, bindable, requestedit, id(DISPID_BACKCOLOR)]
+	HRESULT BackColor([out,retval]OLE_COLOR* pclr);
+	[propput, bindable, requestedit, id(DISPID_FILLCOLOR)]
+	HRESULT FillColor([in]OLE_COLOR clr);
+	[propget, bindable, requestedit, id(DISPID_FILLCOLOR)]
+	HRESULT FillColor([out, retval]OLE_COLOR* pclr);
+	[propput, bindable, requestedit, id(DISPID_FORECOLOR)]
+	HRESULT ForeColor([in]OLE_COLOR clr);
+	[propget, bindable, requestedit, id(DISPID_FORECOLOR)]
+	HRESULT ForeColor([out,retval]OLE_COLOR* pclr);
+	[propput, bindable, requestedit, id(DISPID_TEXT)]
+	HRESULT Text([in]BSTR strText);
+	[propget, bindable, requestedit, id(DISPID_TEXT)]
+	HRESULT Text([out, retval]BSTR* pstrText);
+};
 
 [
 	uuid(78d2889a-4a16-4088-9f87-ea270d443635),
@@ -36,6 +64,16 @@ library ontoumleapluginLib
 		HRESULT EA_GetMenuItems([in] IDualRepository* pRepo, [in] BSTR bstrMenuLocation, [in] BSTR bstrMenuName, [out, retval] VARIANT* pRetVal);
 		HRESULT EA_GetMenuState([in] IDualRepository* pRepo, [in] BSTR bstrMenuLocation, [in] BSTR bstrMenuName, [in] BSTR bstrItemName, [out] VARIANT_BOOL* pIsEnabled, [out] VARIANT_BOOL* pIsChecked);
 		HRESULT EA_MenuClick([in] IDualRepository* pRepo, [in] BSTR bstrMenuLocation, [in] BSTR bstrMenuName, [in] BSTR bstrItemName);
+		HRESULT EA_OnOutputItemClicked([in] IDualRepository* pRepo, [in] BSTR bstrTabName, [in] BSTR bstrLineText, [in] int Id);
+		HRESULT EA_OnOutputItemDoubleClicked([in] IDualRepository* pRepo, [in] BSTR bstrTabName, [in] BSTR bstrLineText, [in] int Id);
+	};
+	[
+		uuid(dd659e12-5d8d-4207-9403-3968abec3db1),
+		control
+	]
+	coclass ValidationResultControl
+	{
+		[default] interface IValidationResultControl;
 	};
 };
 

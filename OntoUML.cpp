@@ -3,8 +3,31 @@
 #include "pch.h"
 
 #include "OntoUML.h"
-#include <cpprest/json.h>
-#include <cpprest/http_client.h>
+
+std::map<std::wstring, std::vector<std::wstring>> COntoUML::s_defaultRestrictedToValues =
+{
+	{ U("kind"), {U("functional-complex")} },
+	{ U("collective"), {U("collective")} },
+	{ U("quantity"), {U("quantity")} },
+	{ U("relator"), {U("relator")} },
+	{ U("quality"), {U("quality")} },
+	{ U("mode"), {U("intrinsic-mode")} },
+	{ U("event"), {U("event")} },
+	{ U("situation"), {U("situation")} },
+	{ U("abstract"), {U("abstract")} },
+	{ U("datatype"), {U("abstract")} },
+	{ U("enumeration"), {U("abstract")} },
+	{ U("type"), {U("type")} },
+	{ U("subkind"), {U("functional-complex")} },
+	{ U("role"), {U("functional-complex")} },
+	{ U("roleMixin"), {U("functional-complex")} },
+	{ U("phase"), {U("functional-complex")} },
+	{ U("phaseMixin"), {U("functional-complex")} },
+	{ U("category"), {U("functional-complex")} },
+	{ U("mixin"), {U("functional-complex")} },
+	{ U("historicalRole"), {U("functional-complex")} },
+	{ U("historicalRoleMixin"), {U("functional-complex")} },
+};
 
 // COntoUML
 STDMETHODIMP COntoUML::EA_Connect(IDualRepository* pRepo, BSTR* pRetVal)
@@ -16,13 +39,204 @@ STDMETHODIMP COntoUML::EA_Connect(IDualRepository* pRepo, BSTR* pRetVal)
 
 	// Normal AddIn (not workflow or MDG)
 	auto hr = CComBSTR(L"").CopyTo(pRetVal);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
 	if (!pRepo)
 	{
 		return E_INVALIDARG;
 	}
+	CreateOntoUMLTab(pRepo);
+
+	//////////
+	// Todo: fix custom UI. Probably move out of EA_Connect into one of the other events
+	//////////
+	//IUnknown *pControl = 0;
+	//CComBSTR bstrTitle = L"OntoUML";
+	//CComBSTR bstrProgId = L"ontouml-ea-plugin.validation-result";
+	//hr = pRepo->AddTab(bstrTitle, bstrProgId, &pControl);
+
+	//if (SUCCEEDED(hr))
+	//{
+	//	hr = pControl->QueryInterface(&m_spValidationResultControl);
+	//	pControl->Release();
+	//}
 
 	return hr;
+}
+
+STDMETHODIMP COntoUML::EA_OnOutputItemClicked(IDualRepository* pRepo, BSTR bstrTabName, BSTR bstrLineText, int ID)
+{
+	if (!pRepo)
+	{
+		return E_INVALIDARG;
+	}
+
+	if (wcscmp(TAB_ONTOUML, bstrTabName))
+	{
+		return S_FALSE;
+	}
+
+	ID = m_outputIdToElementId[ID];
+
+	// If there's a value in m_spCurrentDiagram, use that
+	if (m_spCurrentDiagram)
+	{
+		DeselectEverything(pRepo);
+
+		return SelectObject(pRepo, m_spCurrentDiagram, ID);
+	}
+	else
+	{
+		// Otherwise, search the whole model
+		CComPtr<IDualPackage> spRoot;
+		auto hr = GetModelPackage(pRepo, spRoot);
+		if (FAILED(hr))
+		{
+			return hr;
+		}
+
+		std::vector<IDualPackage*, com_aware_allocator<IDualPackage*>> vobjPackages;
+		if (FAILED(hr = GetAllPackages(spRoot, vobjPackages)))
+		{
+			return hr;
+		}
+
+		for (auto pPackage : vobjPackages)
+		{
+			CComPtr<IDualCollection> spDiagrams;
+			if (FAILED(hr = pPackage->get_Diagrams(&spDiagrams)))
+			{
+				return hr;
+			}
+
+			short sCount = 0;
+			if (FAILED(hr = spDiagrams->get_Count(&sCount)))
+			{
+				return hr;
+			}
+
+			VARIANT_BOOL found = VARIANT_FALSE;
+			for (short i = 0; i < sCount && !found; i++)
+			{
+				CComPtr<IDispatch> spDispDiagram;
+				if (FAILED(hr = spDiagrams->GetAt(i, &spDispDiagram)))
+				{
+					return hr;
+				}
+
+				CComPtr<IDualDiagram> spDiagram;
+				if (FAILED(hr = spDispDiagram->QueryInterface(&spDiagram)))
+				{
+					return hr;
+				}
+
+				if (FAILED(hr = spDiagram->FindElementInDiagram(ID, &found)))
+				{
+					return hr;
+				}
+
+				if (found)
+				{
+					// Weird, but I see no alternative. To make sure we're not selected multiple things
+					// we deselected everything first and then select again
+					hr = DeselectEverything(spDiagram);
+				}
+
+				if (SUCCEEDED(hr))
+				{
+					hr = SelectObject(pRepo, spDiagram, ID);
+				}
+			}
+		}
+
+		return hr;
+	}
+}
+
+HRESULT COntoUML::SelectObject(IDualRepository *pRepo, CComPtr<IDualDiagram>& spDiagram, LONG lID)
+{
+	VARIANT_BOOL bFound = VARIANT_FALSE;
+	auto hr = spDiagram->FindElementInDiagram(lID, &bFound);
+
+	if (!bFound)
+	{
+		CComPtr<IDualConnector> spConnector;
+		hr = pRepo->GetConnectorByID(lID, &spConnector);
+
+		if (SUCCEEDED(hr))
+		{
+			hr = spDiagram->put_SelectedConnector(spConnector);
+		}
+	}
+
+	return hr;
+}
+
+HRESULT COntoUML::DeselectEverything(IDualRepository* pRepo)
+{
+	CComPtr<IDualEASelection> spSelection;
+	auto hr = pRepo->get_CurrentSelection(&spSelection);
+
+	CComPtr<IDualCollection> spSelectedElements;
+	if (SUCCEEDED(hr))
+	{
+		hr = spSelection->get_ElementSet(&spSelectedElements);
+	}
+
+	short sCount = 0;
+	if (SUCCEEDED(hr))
+	{
+		hr = spSelectedElements->get_Count(&sCount);
+	}
+
+	for (short i = 0; SUCCEEDED(hr) && i < sCount; i++)
+	{
+		hr = spSelectedElements->Delete(i);
+	}
+
+	return hr;
+}
+
+HRESULT COntoUML::DeselectEverything(CComPtr<IDualDiagram>& spDiagram)
+{
+	CComPtr<IDualCollection> spSelectedObjects;
+	auto hr = spDiagram->get_SelectedObjects(&spSelectedObjects);
+	short sCount = 0;
+	if (SUCCEEDED(hr))
+	{
+		hr = spSelectedObjects->get_Count(&sCount);
+	}
+
+	for (short i = 0; SUCCEEDED(hr) && i < sCount; i++)
+	{
+		hr = spSelectedObjects->Delete(i);
+	}
+
+	return hr;
+}
+
+STDMETHODIMP COntoUML::EA_OnOutputItemDoubleClicked(IDualRepository* pRepo, BSTR bstrTabName, BSTR bstrLineText, int ID)
+{
+	if (!pRepo)
+	{
+		return E_INVALIDARG;
+	}
+
+	if (wcscmp(TAB_ONTOUML, bstrTabName))
+	{
+		return S_FALSE;
+	}
+
+	auto result = m_validationResultsPerOutputId[ID];
+
+	auto stringized = result.serialize();
+
+	MessageBox(NULL, stringized.c_str(), L"Validation result", MB_ICONEXCLAMATION);
+
+	return S_OK;
 }
 
 STDMETHODIMP COntoUML::EA_GetMenuItems(IDualRepository* pRepo, BSTR bstrMenuLocation, BSTR bstrMenuName, VARIANT* pRetVal)
@@ -109,13 +323,13 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 {
 	std::vector<long> vElementIDs;
 	std::vector<long> vConnectorIDs;
-	std::function<HRESULT(std::vector<IDispatch *, com_aware_allocator<IDispatch*>>&)> getElementCollection;
-	std::function<HRESULT(std::vector<IDispatch *, com_aware_allocator<IDispatch*>>&)> getConnectorCollection;
+	std::function<HRESULT(std::vector<IDispatch*, com_aware_allocator<IDispatch*>>&)> getElementCollection;
+	std::function<HRESULT(std::vector<IDispatch*, com_aware_allocator<IDispatch*>>&)> getConnectorCollection;
 	std::function<HRESULT(IDualPackage* pPackage, std::vector<IDualPackage*, com_aware_allocator<IDualPackage*>>& vobjPackages)> getAllPackages;
 	std::function<HRESULT(IDispatch*, long&)> getElementID;
 	std::function<HRESULT(IDispatch*, long&)> getConnectorID;
 
-	auto getIDsFromCollection = [](std::function<HRESULT(std::vector<IDispatch *, com_aware_allocator<IDispatch *>>&)> getCollection, std::function<HRESULT(IDispatch*, long&)> convertToID, std::vector<long>& vIds) -> HRESULT
+	auto getIDsFromCollection = [](std::function<HRESULT(std::vector<IDispatch*, com_aware_allocator<IDispatch*>>&)> getCollection, std::function<HRESULT(IDispatch*, long&)> convertToID, std::vector<long>& vIds) -> HRESULT
 		{
 			if (!getCollection || !convertToID)
 			{
@@ -123,7 +337,7 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 			}
 
 			com_aware_allocator<IDispatch*> saDispatch;
-			std::vector<IDispatch *, com_aware_allocator<IDispatch *>> vobjCollection(saDispatch);
+			std::vector<IDispatch*, com_aware_allocator<IDispatch*>> vobjCollection(saDispatch);
 			auto hr = getCollection(vobjCollection);
 
 			for (auto i = vobjCollection.begin(); SUCCEEDED(hr) && i != vobjCollection.end(); i++)
@@ -153,7 +367,15 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 		return E_INVALIDARG;
 	}
 
-	auto hr = S_OK;
+	auto hr = CreateOntoUMLTab(pRepo);
+
+	m_outputIdToElementId.clear();
+	m_validationResultsPerOutputId.clear();
+
+	if (m_spCurrentDiagram)
+	{
+		m_spCurrentDiagram.Release();
+	}
 
 	if (0 == wcscmp(bstrItemName, MI_VALIDATE_MODEL))
 	{
@@ -172,17 +394,17 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 		IDualPackage* pRootPackage = spPackage.Detach();
 
 		// Then set all lambdas to point at the correct behavior for the model scope
-		getAllPackages = [this, &getAllPackages](IDualPackage *pPackage, std::vector<IDualPackage *, com_aware_allocator<IDualPackage *>>& vobjPackages)->HRESULT
+		getAllPackages = [this, &getAllPackages](IDualPackage* pPackage, std::vector<IDualPackage*, com_aware_allocator<IDualPackage*>>& vobjPackages)->HRESULT
 			{
 				return GetAllPackages(pPackage, vobjPackages);
 			};
 
-		getElementCollection = [this, &pRootPackage, &getAllPackages](std::vector<IDispatch *, com_aware_allocator<IDispatch *>>& vobjCollection) -> HRESULT
+		getElementCollection = [this, &pRootPackage, &getAllPackages](std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection) -> HRESULT
 			{
 				return GetElementCollectionInModelScope(pRootPackage, vobjCollection);
 			};
 
-		getConnectorCollection = [this, &getElementCollection](std::vector<IDispatch *, com_aware_allocator<IDispatch *>>& vobjCollection) -> HRESULT
+		getConnectorCollection = [this, &getElementCollection](std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection) -> HRESULT
 			{
 				return GetConnectorCollectionInModelScope(getElementCollection, vobjCollection);
 			};
@@ -204,22 +426,21 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 		//////////
 
 		// First get the diagram to validate
-		CComPtr<IDualDiagram> spDiagram;
-		hr = GetDiagramToValidate(pRepo, spDiagram);
-		if (FAILED(hr) || !spDiagram)
+		hr = GetDiagramToValidate(pRepo, m_spCurrentDiagram);
+		if (FAILED(hr) || !m_spCurrentDiagram)
 		{
 			return S_FALSE;
 		}
 
 		// Then set all lambdas to point at the correct behavior for the diagram scope
-		getElementCollection = [this, &spDiagram](std::vector<IDispatch *, com_aware_allocator<IDispatch *>>& vobjCollection) -> HRESULT
+		getElementCollection = [this](std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection) -> HRESULT
 			{
-				return GetElementCollectionInDiagramScope(spDiagram, vobjCollection);
+				return GetElementCollectionInDiagramScope(m_spCurrentDiagram, vobjCollection);
 			};
 
-		getConnectorCollection = [this, &spDiagram](std::vector<IDispatch *, com_aware_allocator<IDispatch *>>& vobjCollection) -> HRESULT
+		getConnectorCollection = [this](std::vector<IDispatch*, com_aware_allocator<IDispatch*>>& vobjCollection) -> HRESULT
 			{
-				return GetConnectorCollectionInDiagramScope(spDiagram, vobjCollection);
+				return GetConnectorCollectionInDiagramScope(m_spCurrentDiagram, vobjCollection);
 			};
 
 		getElementID = [this](IDispatch* pobjDiagram, long& lElementID) -> HRESULT
@@ -229,7 +450,7 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 
 		getConnectorID = [this](IDispatch* pobjDiagram, long& lConnectorID) -> long
 			{
-				return GetConnectIdInDiagramScope(pobjDiagram, lConnectorID);
+				return GetConnectorIdInDiagramScope(pobjDiagram, lConnectorID);
 			};
 	}
 
@@ -247,7 +468,9 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 	{
 		return hr;
 	}
-	
+
+	// Fixup a map to connect all element ids to the all diagrams they appear in
+
 	auto project = web::json::value::object();
 	project[U("id")] = web::json::value::string(std::to_wstring(42));
 	project[U("name")] = web::json::value();
@@ -265,11 +488,21 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 		CComPtr<IDualElement> spElement;
 		if (SUCCEEDED(hr = pRepo->GetElementByID(elt, &spElement)))
 		{
+			CComBSTR bstrType;
+			if (FAILED(hr = spElement->get_Type(&bstrType)))
+			{
+				return hr;
+			}
+
+			if (wcscmp(U("Class"), bstrType))
+			{
+				continue;
+			}
+
 			auto element = web::json::value::object();
 			CComBSTR bstrName;
 			CComBSTR bstrNotes;
 			CComBSTR bstrStereotype;
-			CComBSTR bstrRestrictedTo(U("functional-complex"));
 
 			if (FAILED(hr = spElement->get_Name(&bstrName)))
 			{
@@ -292,21 +525,47 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 				return hr;
 			}
 
-			CComBSTR bstrRestrictedToTag(U("restrictedTo"));
 			CComQIPtr <IDualTaggedValue> spTaggedValue;
 			CComPtr<IDispatch> spDispTaggedValue;
-			if (SUCCEEDED(spTaggedValues->GetByName(bstrRestrictedToTag, &spDispTaggedValue)) && spDispTaggedValue)
+			std::vector<IDualTaggedValue*, com_aware_allocator<IDualTaggedValue*>> vTaggedValues;
+			std::function<bool(IDualTaggedValue* p)> filter = [](IDualTaggedValue* p) -> bool
+				{
+					CComBSTR bstrName;
+					p->get_Name(&bstrName);
+					return !wcscmp(bstrName, U("restrictedTo"));
+				};
+			copyToVector(spTaggedValues, vTaggedValues, filter); // vTaggedValues contains only the restrictedTo tagged values
+
+			std::vector<std::wstring> vRestrictedTo;
+			if (vTaggedValues.size() > 0)
 			{
-				spTaggedValue = spDispTaggedValue;
-				spTaggedValue->get_Value(&bstrRestrictedTo);
+				std::transform(vTaggedValues.begin(), vTaggedValues.end(), std::back_inserter(vRestrictedTo), [](IDualTaggedValue* pTag) -> std::wstring
+					{
+						CComBSTR bstrValue;
+						pTag->get_Value(&bstrValue);
+						return bstrValue.operator wchar_t* ();
+					});
+			}
+			else
+			{
+				vRestrictedTo = s_defaultRestrictedToValues[bstrStereotype.operator wchar_t* ()];
+
+				// Todo: update element to include restrictedTo tagged values
 			}
 
+			auto restrictedTo = web::json::value::array();
+			for (auto pwszRestrictedTo : vRestrictedTo)
+			{
+				restrictedTo[restrictedTo.size()] = web::json::value::string(pwszRestrictedTo);
+			}
+
+			element[U("restrictedTo")] = restrictedTo;
 			element[U("id")] = web::json::value::string(std::to_wstring(elt));
-			element[U("name")] = web::json::value::string(bstrName.operator wchar_t *());
-			element[U("description")] = web::json::value::string(bstrNotes.operator wchar_t *());
+			element[U("name")] = web::json::value::string(bstrName.operator wchar_t* ());
+			element[U("description")] = web::json::value::string(bstrNotes.operator wchar_t* ());
 			element[U("type")] = web::json::value::string(U("Class"));
 			element[U("propertyAssignments")] = web::json::value();
-			element[U("stereotype")] = web::json::value::string(bstrStereotype.operator wchar_t *());
+			element[U("stereotype")] = web::json::value::string(bstrStereotype.operator wchar_t* ());
 			element[U("isAbstract")] = web::json::value::boolean(false);
 			element[U("isDerived")] = web::json::value::boolean(false);
 			element[U("properties")] = web::json::value();
@@ -314,11 +573,103 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 			element[U("isPowertype")] = web::json::value();
 			element[U("literals")] = web::json::value();
 
-			auto restrictedTo = web::json::value::array(1);
-			restrictedTo[0] = web::json::value::string(bstrRestrictedTo.operator wchar_t *());
-			element[U("restrictedTo")] = restrictedTo;
-
 			content[content.size()] = element;
+		}
+	}
+
+	for (auto rel : vConnectorIDs)
+	{
+		CComPtr<IDualConnector> spConnector;
+		if (SUCCEEDED(hr = pRepo->GetConnectorByID(rel, &spConnector)))
+		{
+			CComBSTR bstrType;
+			if (FAILED(hr = spConnector->get_Type(&bstrType)))
+			{
+				return hr;
+			}
+
+			// We only care about aggegations, associations and generalizations
+			if (wcscmp(U("Aggregation"), bstrType) &&
+				wcscmp(U("Association"), bstrType) &&
+				wcscmp(U("Generalization"), bstrType))
+			{
+				continue;
+			}
+
+			auto connector = web::json::value::object();
+			CComBSTR bstrName;
+			CComBSTR bstrNotes;
+			CComBSTR bstrStereotype;
+
+			if (FAILED(hr = spConnector->get_Name(&bstrName)))
+			{
+				return hr;
+			}
+
+			if (FAILED(hr = spConnector->get_Notes(&bstrNotes)))
+			{
+				return hr;
+			}
+
+			if (FAILED(hr = spConnector->get_Stereotype(&bstrStereotype)))
+			{
+				return hr;
+			}
+
+			connector[U("id")] = web::json::value::string(std::to_wstring(rel));
+			connector[U("name")] = web::json::value::string(bstrName.operator wchar_t* ());
+			connector[U("description")] = web::json::value::string(bstrNotes.operator wchar_t* ());
+			connector[U("propertyAssignments")] = web::json::value();
+
+			if (!wcscmp(U("Aggregation"), bstrType) ||
+				!wcscmp(U("Association"), bstrType))
+			{
+				connector[U("type")] = web::json::value::string(U("Relation"));
+				connector[U("stereotype")] = web::json::value::string(bstrStereotype.operator wchar_t* ());
+				connector[U("isAbstract")] = web::json::value::boolean(false);
+				connector[U("isDerived")] = web::json::value::boolean(false);
+
+				auto properties = web::json::value::array(2);
+				auto client = web::json::value::object();
+				auto supplier = web::json::value::object();
+
+				if (FAILED(hr = FillAssociationProperty(client, std::to_wstring(rel) + U("_client"), spConnector, &IDualConnector::get_ClientEnd, &IDualConnector::get_ClientID)))
+				{
+					return hr;
+				}
+
+				if (FAILED(hr = FillAssociationProperty(supplier, std::to_wstring(rel) + U("_supplier"), spConnector, &IDualConnector::get_SupplierEnd, &IDualConnector::get_SupplierID)))
+				{
+					return hr;
+				}
+
+				properties[0] = client;
+				properties[1] = supplier;
+
+				connector[U("properties")] = properties;
+			}
+			else
+			{
+				connector[U("type")] = web::json::value::string(U("Generalization"));
+
+				auto general = web::json::value::object();
+				auto specific = web::json::value::object();
+
+				if (FAILED(hr = FillGeneralizationProperty(specific, spConnector, &IDualConnector::get_ClientID)))
+				{
+					return hr;
+				}
+
+				if (FAILED(hr = FillGeneralizationProperty(general, spConnector, &IDualConnector::get_SupplierID)))
+				{
+					return hr;
+				}
+
+				connector[U("specific")] = specific;
+				connector[U("general")] = general;
+			}
+
+			content[content.size()] = connector;
 		}
 	}
 
@@ -336,40 +687,38 @@ STDMETHODIMP COntoUML::EA_MenuClick(IDualRepository* pRepo, BSTR bstrMenuLocatio
 	request.headers().set_content_type(U("application/json"));
 	request.set_body(payload);
 
-	client.request(request).then([](web::http::http_response response)
+	std::vector<web::json::value> vErrors;
+	client.request(request).then([&vErrors](web::http::http_response response)
 		{
 			if (response.status_code() == web::http::status_codes::OK)
 			{
+				//////////
+				// Be extremely careful here!!! We are on a background thread and we are not allowed to touch the EA API
+				// (without properly marshaling interface pointers)
+				//////////
+
 				auto body = response.extract_json().get();
-				auto tst_body = body.serialize();
+				auto results = body[U("result")];
+				for (auto& result : results.as_array())
+				{
+					vErrors.push_back(result);
+				}
 			}
 		}).wait();
 
-	//////////
-	// Todo: Validate the model or diagram using the ids in vElementIDs and vConnectorIDs
-	//////////
-	//quicktype::OntoumlSchema project;
-	//project.set_type(quicktype::OntoUmlElementType::PROJECT);
-	//project.set_id(std::to_string(42)); // use id for project desc
-	//auto elements = std::vector<quicktype::Element>();
-	//
-	//for (auto elt : vElementIDs)
-	//{
-	//	CComPtr<IDualElement> spElement;
-	//	if (SUCCEEDED(hr = pRepo->GetElementByID(elt, &spElement)))
-	//	{
-	//		quicktype::Element element;
-	//		element.set_type(quicktype::ElementType::CLASS);
+	auto outputNr = 42;
+	for (auto& err : vErrors)
+	{
+		auto description = err[U("description")];
+		auto elementId = _wtoi(err[U("data")][U("source")][U("id")].as_string().c_str());
 
+		m_validationResultsPerOutputId[outputNr] = err;
+		m_outputIdToElementId[outputNr] = elementId;
 
-	//		elements.push_back(element);
-	//	}
-	//}
-	//project.set_elements(std::optional(elements));
+		hr = pRepo->WriteOutput(CComBSTR(TAB_ONTOUML), CComBSTR(description.as_string().c_str()), outputNr);
 
-	//quicktype::json json;
-	//quicktype::to_json(json, project);
-	//auto dump = json.dump();
+		outputNr++;
+	}
 
 	return S_OK;
 }
@@ -615,7 +964,7 @@ HRESULT COntoUML::GetAllPackages(IDualPackage* pPackage, std::vector<IDualPackag
 	}
 }
 
-HRESULT COntoUML::GetConnectIdInDiagramScope(IDispatch* pobjDiagram, long& lConnectorID)
+HRESULT COntoUML::GetConnectorIdInDiagramScope(IDispatch* pobjDiagram, long& lConnectorID)
 {
 	CComPtr<IDualDiagramLink> spDiagramObject;
 	auto hr = pobjDiagram->QueryInterface(&spDiagramObject);
@@ -662,6 +1011,95 @@ HRESULT COntoUML::GetElementCollectionInDiagramScope(const ATL::CComPtr<IDualDia
 	if (SUCCEEDED(hr))
 	{
 		hr = copyToVector(spCollection, vobjCollection);
+	}
+
+	return hr;
+}
+
+HRESULT COntoUML::FillAssociationProperty(web::json::value& prop, std::wstring id, IDualConnector* pConnector, std::function<HRESULT(IDualConnector*, IDualConnectorEnd**)> endSelector, std::function<HRESULT(IDualConnector*, LONG*)> idSelector)
+{
+	if (!pConnector)
+	{
+		return E_INVALIDARG;
+	}
+
+	prop[U("id")] = web::json::value::string(id);
+	prop[U("name")] = web::json::value();
+	prop[U("description")] = web::json::value();
+	prop[U("type")] = web::json::value::string(U("Property"));
+	prop[U("propertyAssignments")] = web::json::value();
+	prop[U("stereotype")] = web::json::value();
+	prop[U("isDerived")] = web::json::value::boolean(false);
+	prop[U("isReadOnly")] = web::json::value::boolean(false);
+	prop[U("isOrdered")] = web::json::value::boolean(false);
+	prop[U("cardinality")] = web::json::value::boolean(false);
+
+	CComPtr<IDualConnectorEnd> spEnd;
+	auto hr = endSelector(pConnector, &spEnd);
+
+	CComBSTR bstrCardinality;
+	if (SUCCEEDED(hr))
+	{
+		hr = spEnd->get_Cardinality(&bstrCardinality);
+
+		if (SUCCEEDED(hr))
+		{
+			prop[U("cardinality")] = web::json::value::string(bstrCardinality.operator wchar_t* ());
+		}
+	}
+
+	if (SUCCEEDED(hr))
+	{
+		LONG lID = 0;
+		hr = idSelector(pConnector, &lID);
+
+		if (SUCCEEDED(hr))
+		{
+			auto propertyType = web::json::value::object();
+
+			propertyType[U("id")] = web::json::value::string(std::to_wstring(lID));
+			propertyType[U("type")] = web::json::value::string(U("Class"));
+
+			prop[U("propertyType")] = propertyType;
+
+		}
+	}
+
+	return hr;
+}
+
+HRESULT COntoUML::FillGeneralizationProperty(web::json::value& prop, IDualConnector* pConnector, std::function<HRESULT(IDualConnector*, LONG*)> idSelector)
+{
+	if (!pConnector)
+	{
+		return E_INVALIDARG;
+	}
+
+	LONG lID = 0;
+	auto hr = S_OK;
+	if (FAILED(hr = idSelector(pConnector, &lID)))
+	{
+		return hr;
+	}
+
+	prop[U("id")] = web::json::value::string(std::to_wstring(lID));
+	prop[U("type")] = web::json::value::string(U("Class"));
+
+	return hr;
+}
+
+HRESULT COntoUML::CreateOntoUMLTab(IDualRepository* pRepo)
+{
+
+	CComBSTR bstrOntoUml(TAB_ONTOUML);
+	auto hr = pRepo->CreateOutputTab(bstrOntoUml);
+	if (SUCCEEDED(hr))
+	{
+		hr = pRepo->ClearOutput(bstrOntoUml);
+	}
+	if (SUCCEEDED(hr))
+	{
+		hr = pRepo->EnsureOutputVisible(bstrOntoUml);
 	}
 
 	return hr;

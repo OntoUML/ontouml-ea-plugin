@@ -52,6 +52,9 @@
     <ClInclude Include="ontoumleaplugin_i.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ValidationResultControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ontouml-ea-plugin.cpp">
@@ -70,6 +73,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ontoumleaplugin_i.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ValidationResultControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,10 +101,19 @@
     <None Include="vcpkg.json">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="ValidationResultControl.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ValidationResultControl.htm" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ontoumleaplugin.idl">
       <Filter>Source Files</Filter>
     </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ValidationResultControl.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

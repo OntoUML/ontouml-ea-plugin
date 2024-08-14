@@ -1,0 +1,32 @@
+HKCR
+{
+	ontouml-ea-plugin.validation-result.1 = s 'ValidationResultControl class'
+	{
+		CLSID = s '{dd659e12-5d8d-4207-9403-3968abec3db1}'
+	}
+	ontouml-ea-plugin.validation-result = s 'ValidationResultControl class'
+	{		
+		CurVer = s 'ontouml-ea-plugin.validation-result.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {dd659e12-5d8d-4207-9403-3968abec3db1} = s 'ValidationResultControl class'
+		{
+			ProgID = s 'ontouml-ea-plugin.validation-result.1'
+			VersionIndependentProgID = s 'ontouml-ea-plugin.validation-result'
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove Control
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 107'
+			MiscStatus = s '0'
+			{
+			    '1' = s '%OLEMISC%'
+			}
+			TypeLib = s '{78d2889a-4a16-4088-9f87-ea270d443635}'
+			Version = s '1.0'
+		}
+	}
+}
