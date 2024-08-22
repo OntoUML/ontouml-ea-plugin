@@ -1,0 +1,140 @@
+<?xml  version='1.0' encoding='windows-1252' ?>
+<UMLProfile profiletype="uml2">
+	<Documentation id="A787F564-E" name="OntoUML" version="1.0" notes="OntoUML"/>
+	<Content>
+		<Stereotypes>
+			<Stereotype name="abstract" notes="" cx="0" cy="0" bgcolor="16777215" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="abstract"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="begin" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Property Stereotype" baseStereotypes="OntoUML%20Property%20Stereotype"/>
+			<Stereotype name="bringsAbout" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="category" notes="" cx="0" cy="0" bgcolor="14277081" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype"/>
+			<Stereotype name="characterization" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="collective" notes="" cx="0" cy="0" bgcolor="10721791" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="collective"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="comparative" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="componentOf" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="creation" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="datatype" notes="" cx="0" cy="0" bgcolor="16777215" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="abstract"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="derivation" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="end" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Property Stereotype" baseStereotypes="OntoUML%20Property%20Stereotype"/>
+			<Stereotype name="enumeration" notes="" cx="0" cy="0" bgcolor="16777215" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="abstract"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="event" notes="" cx="0" cy="0" bgcolor="13959164" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="event"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="externalDependence" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="First-Order Stereotype" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true" generalizes="OntoUML Class Stereotype" baseStereotypes="OntoUML%20Class%20Stereotype"/>
+			<Stereotype name="historicalDependence" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="historicalRole" notes="" cx="0" cy="0" bgcolor="14277081" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype"/>
+			<Stereotype name="historicalRoleMixin" notes="" cx="0" cy="0" bgcolor="14277081" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype"/>
+			<Stereotype name="instantiation" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="kind" notes="" cx="0" cy="0" bgcolor="10721791" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="functional-complex"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="manifestation" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="material" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="mediation" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="memberOf" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="mixin" notes="" cx="0" cy="0" bgcolor="14277081" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype"/>
+			<Stereotype name="mode" notes="" cx="0" cy="0" bgcolor="16766832" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="intrinsic-mode"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="OntoUML Association Stereotype" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+				<AppliesTo>
+					<Apply type="Association">
+						<Property name="compositionKind" value="none"/>
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="OntoUML Class Stereotype" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+				<AppliesTo>
+					<Apply type="Class">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="functional-complex"/>
+					<Tag name="order" type="char" description="" unit="" values="" default="1"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="OntoUML Property Stereotype" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true">
+				<AppliesTo>
+					<Apply type="Property">
+						<Property name="aggregation" value="none"/>
+						<Property name="default" value=""/>
+						<Property name="isComposite" value=""/>
+						<Property name="isDerived" value="false"/>
+						<Property name="isDerivedUnion" value="false"/>
+						<Property name="isID" value="false"/>
+						<Property name="isReadOnly" value="false"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="participation" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="participational" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="phase" notes="" cx="0" cy="0" bgcolor="14277081" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype"/>
+			<Stereotype name="phaseMixin" notes="" cx="0" cy="0" bgcolor="14277081" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype"/>
+			<Stereotype name="quality" notes="" cx="0" cy="0" bgcolor="16766832" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="quality"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="quantity" notes="" cx="0" cy="0" bgcolor="10721791" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="quantity"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="relator" notes="" cx="0" cy="0" bgcolor="10092441" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="relator"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="role" notes="" cx="0" cy="0" bgcolor="14277081" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype"/>
+			<Stereotype name="roleMixin" notes="" cx="0" cy="0" bgcolor="14277081" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype"/>
+			<Stereotype name="situation" notes="" cx="0" cy="0" bgcolor="12640511" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="First-Order Stereotype" baseStereotypes="First-Order%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="situation"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="subCollectionOf" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="subkind" notes="" cx="0" cy="0" bgcolor="14277081" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype"/>
+			<Stereotype name="subQuantityOf" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="termination" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="triggers" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" generalizes="OntoUML Association Stereotype" baseStereotypes="OntoUML%20Association%20Stereotype"/>
+			<Stereotype name="type" notes="" cx="0" cy="0" bgcolor="16755113" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0" generalizes="Unordered Stereotype" baseStereotypes="Unordered%20Stereotype">
+				<TaggedValues>
+					<Tag name="restrictedTo" type="char" description="" unit="" values="" default="type"/>
+					<Tag name="order" type="char" description="" unit="" values="" default="2"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Unordered Stereotype" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0" isAbstract="true" generalizes="OntoUML Class Stereotype" baseStereotypes="OntoUML%20Class%20Stereotype">
+				<TaggedValues>
+					<Tag name="isPowertype" type="boolean" description="" unit="" values="true,false" default="false"/>
+				</TaggedValues>
+			</Stereotype>
+		</Stereotypes>
+		<TaggedValueTypes/>
+		<ViewDefinitions/>
+		<Metamodel/>
+	</Content>
+</UMLProfile>

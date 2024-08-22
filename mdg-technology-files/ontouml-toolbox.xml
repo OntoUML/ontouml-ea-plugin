@@ -1,0 +1,87 @@
+<?xml  version='1.0' encoding='windows-1252' ?>
+<UMLProfile profiletype="uml2">
+	<Documentation id="B9CC959B-E" name="OntoUML Toolbox" version="1.0" notes="OntoUML Toolbox"/>
+	<Content>
+		<Stereotypes>
+			<Stereotype name="Association Elements" alias="Association Elements (OntoUML)" notes="Quick access to classes decorated with OntoUML stereotypes." cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+				<AppliesTo>
+					<Apply type="ToolboxPage">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="OntoUML::formal(UML::Association)" type="" description="" unit="" values="" default="Formal"/>
+					<Tag name="OntoUML::material(UML::Association)" type="" description="" unit="" values="" default="Material"/>
+					<Tag name="OntoUML::comparative(UML::Association)" type="" description="" unit="" values="" default="Comparative"/>
+					<Tag name="OntoUML::mediation(UML::Association)" type="" description="" unit="" values="" default="Mediation"/>
+					<Tag name="OntoUML::characterization(UML::Association)" type="" description="" unit="" values="" default="Characterization"/>
+					<Tag name="OntoUML::externalDependence(UML::Association)" type="" description="" unit="" values="" default="External Dependence"/>
+					<Tag name="OntoUML::componentOf(UML::Association)" type="" description="" unit="" values="" default="Component Of"/>
+					<Tag name="OntoUML::memberOf(UML::Association)" type="" description="" unit="" values="" default="Member Of"/>
+					<Tag name="OntoUML::subCollectionOf(UML::Association)" type="" description="" unit="" values="" default="Sub-Collection Of"/>
+					<Tag name="OntoUML::subQuantityOf(UML::Association)" type="" description="" unit="" values="" default="Sub-Quantity Of"/>
+					<Tag name="OntoUML::instantiation(UML::Association)" type="" description="" unit="" values="" default="Instantiation"/>
+					<Tag name="OntoUML::termination(UML::Association)" type="" description="" unit="" values="" default="Termination"/>
+					<Tag name="OntoUML::participational(UML::Association)" type="" description="" unit="" values="" default="Participational"/>
+					<Tag name="OntoUML::historicalDependence(UML::Association)" type="" description="" unit="" values="" default="Historical Dependence"/>
+					<Tag name="OntoUML::participation(UML::Association)" type="" description="" unit="" values="" default="Participation"/>
+					<Tag name="OntoUML::creation(UML::Association)" type="" description="" unit="" values="" default="Creation"/>
+					<Tag name="OntoUML::manifestation(UML::Association)" type="" description="" unit="" values="" default="Manifestation"/>
+					<Tag name="OntoUML::bringsAbout(UML::Association)" type="" description="" unit="" values="" default="Brings About"/>
+					<Tag name="OntoUML::triggers(UML::Association)" type="" description="" unit="" values="" default="Triggers"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Class Elements" alias="Class Elements (OntoUML)" notes="Quick access to classes decorated with OntoUML stereotypes." cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+				<AppliesTo>
+					<Apply type="ToolboxPage">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="OntoUML::category(UML::Class)" type="" description="" unit="" values="" default="Category"/>
+					<Tag name="OntoUML::mixin(UML::Class)" type="" description="" unit="" values="" default="Mixin"/>
+					<Tag name="OntoUML::phaseMixin(UML::Class)" type="" description="" unit="" values="" default="Phase Mixin"/>
+					<Tag name="OntoUML::roleMixin(UML::Class)" type="" description="" unit="" values="" default="Role Mixin"/>
+					<Tag name="OntoUML::collective(UML::Class)" type="" description="" unit="" values="" default="Collective"/>
+					<Tag name="OntoUML::kind(UML::Class)" type="" description="" unit="" values="" default="Kind"/>
+					<Tag name="OntoUML::mode(UML::Class)" type="" description="" unit="" values="" default="Mode"/>
+					<Tag name="OntoUML::quality(UML::Class)" type="" description="" unit="" values="" default="Quality"/>
+					<Tag name="OntoUML::quantity(UML::Class)" type="" description="" unit="" values="" default="Quantity"/>
+					<Tag name="OntoUML::relator(UML::Class)" type="" description="" unit="" values="" default="Relator"/>
+					<Tag name="OntoUML::type(UML::Class)" type="" description="" unit="" values="" default="Type"/>
+					<Tag name="OntoUML::subkind(UML::Class)" type="" description="" unit="" values="" default="Subkind"/>
+					<Tag name="OntoUML::phase(UML::Class)" type="" description="" unit="" values="" default="Phase"/>
+					<Tag name="OntoUML::role(UML::Class)" type="" description="" unit="" values="" default="Role"/>
+					<Tag name="OntoUML::event(UML::Class)" type="" description="" unit="" values="" default="Event"/>
+					<Tag name="OntoUML::historicalRole(UML::Class)" type="" description="" unit="" values="" default="Historical Role"/>
+					<Tag name="OntoUML::historicalRoleMixin(UML::Class)" type="" description="" unit="" values="" default="Historical Role Mixin"/>
+					<Tag name="OntoUML::situation(UML::Class)" type="" description="" unit="" values="" default="Situation"/>
+					<Tag name="OntoUML::abstract(UML::Class)" type="" description="" unit="" values="" default="Abstract"/>
+					<Tag name="OntoUML::datatype(UML::Class)" type="" description="" unit="" values="" default="Datatype"/>
+					<Tag name="OntoUML::enumeration(UML::Class)" type="" description="" unit="" values="" default="Enumeration"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="UML Elements" alias="UML Elements (OntoUML)" notes="Quick access to relevant UML elements." cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+				<AppliesTo>
+					<Apply type="ToolboxPage">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="UML::AssociationElement" type="" description="" unit="" values="" default="N-Ary Association"/>
+					<Tag name="UML::Class" type="" description="" unit="" values="" default="Class"/>
+					<Tag name="UML::Package" type="" description="" unit="" values="" default="Package"/>
+					<Tag name="UML::Generalization" type="" description="" unit="" values="" default="Generalization"/>
+					<Tag name="UML::Association" type="" description="" unit="" values="" default="Association"/>
+					<Tag name="UML::Aggregation" type="" description="" unit="" values="" default="Aggregation"/>
+					<Tag name="UML::Composition" type="" description="" unit="" values="" default="Composition"/>
+					<Tag name="UML::AssociationClass" type="" description="" unit="" values="" default="Association Class"/>
+					<Tag name="UML::Dependency" type="" description="" unit="" values="" default="Dependency"/>
+				</TaggedValues>
+			</Stereotype>
+		</Stereotypes>
+		<TaggedValueTypes/>
+		<ViewDefinitions/>
+		<Metamodel/>
+	</Content>
+</UMLProfile>
